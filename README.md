@@ -1,36 +1,75 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# FitPDF
 
-## Getting Started
+FitPDF è un'applicazione web moderna che permette ai personal trainer di creare programmi di allenamento personalizzati per i loro clienti e generare PDF professionali.
 
-First, run the development server:
+## Caratteristiche
+
+- 🎯 Creazione di programmi di allenamento personalizzati
+- 👤 Gestione delle informazioni dei clienti
+- 📝 Editor intuitivo per gli esercizi
+- 🎨 Template PDF professionali e moderni
+- 📱 Design responsive
+- ⚡ Sviluppato con Next.js e TypeScript
+
+## Tecnologie Utilizzate
+
+- Next.js 14
+- TypeScript
+- Tailwind CSS
+- React
+- HTML2PDF (per la generazione dei PDF)
+
+## Installazione
+
+1. Clona il repository:
+
+```bash
+git clone https://github.com/tuousername/fitpdf.git
+cd fitpdf
+```
+
+2. Installa le dipendenze:
+
+```bash
+npm install
+# oppure
+yarn install
+```
+
+3. Avvia il server di sviluppo:
 
 ```bash
 npm run dev
-# or
+# oppure
 yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+4. Apri [http://localhost:3000](http://localhost:3000) nel tuo browser.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Struttura del Progetto
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```
+fitpdf/
+├── src/
+│   ├── app/
+│   │   ├── components/
+│   │   │   ├── TextInput.tsx
+│   │   │   ├── TextArea.tsx
+│   │   │   ├── TrainerForm.tsx
+│   │   │   └── WorkoutTemplate.tsx
+│   │   ├── layout.tsx
+│   │   └── page.tsx
+│   └── styles/
+│       └── globals.css
+├── public/
+├── package.json
+└── README.md
+```
 
-## Learn More
+## Contribuire
 
-To learn more about Next.js, take a look at the following resources:
+Le pull request sono benvenute. Per modifiche importanti, apri prima un issue per discutere cosa vorresti cambiare.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Licenza
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+[MIT](https://choosealicense.com/licenses/mit/)
