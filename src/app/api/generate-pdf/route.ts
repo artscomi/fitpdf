@@ -1,45 +1,36 @@
 import { NextResponse } from "next/server";
-import puppeteer from "puppeteer";
+import puppeteer from "puppeteer-core";
+import chromium from "@sparticuz/chromium";
 
 export async function POST(request: Request) {
   try {
     const { html, filename } = await request.json();
 
-    // Avvia il browser
     const browser = await puppeteer.launch({
+      args: chromium.args,
+      executablePath: await chromium.executablePath(),
       headless: true,
-      args: [
-        "--no-sandbox",
-        "--disable-setuid-sandbox",
-        "--disable-web-security",
-        "--disable-features=IsolateOrigins,site-per-process",
-      ],
     });
 
-    // Crea una nuova pagina
     const page = await browser.newPage();
+    await page.setContent(html, { waitUntil: "networkidle0" });
 
-    // Intercetta le richieste di immagini
-    await page.setRequestInterception(true);
-    page.on("request", (request) => {
-      if (request.resourceType() === "image") {
-        request.continue();
-      } else {
-        request.continue();
-      }
+    // Aspetta che tutte le immagini siano caricate
+    await page.evaluate(() => {
+      return Promise.all(
+        Array.from(document.images)
+          .filter((img) => !img.complete)
+          .map(
+            (img) =>
+              new Promise((resolve) => {
+                img.onload = img.onerror = resolve;
+              })
+          )
+      );
     });
 
-    // Imposta il contenuto HTML
-    await page.setContent(html, {
-      waitUntil: "networkidle0",
-    });
-
-    // Aspetta un po' per assicurarsi che le immagini siano caricate
-    await new Promise((resolve) => setTimeout(resolve, 5000));
-
-    // Genera il PDF
     const pdf = await page.pdf({
-      format: "a4",
+      format: "A4",
       printBackground: true,
       margin: {
         top: "20px",
@@ -49,10 +40,8 @@ export async function POST(request: Request) {
       },
     });
 
-    // Chiudi il browser
     await browser.close();
 
-    // Restituisci il PDF come risposta
     return new NextResponse(pdf, {
       headers: {
         "Content-Type": "application/pdf",
@@ -61,9 +50,6 @@ export async function POST(request: Request) {
     });
   } catch (error) {
     console.error("Error generating PDF:", error);
-    return NextResponse.json(
-      { error: "Failed to generate PDF" },
-      { status: 500 }
-    );
+    return new NextResponse("Error generating PDF", { status: 500 });
   }
 }
