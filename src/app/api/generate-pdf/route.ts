@@ -1,26 +1,24 @@
 import { NextResponse } from "next/server";
 import puppeteer from "puppeteer";
-import chromium from "@sparticuz/chromium";
 
 export async function POST(request: Request) {
   try {
     const { html, filename } = await request.json();
 
-    const browser = await puppeteer.launch(
-      process.env.NODE_ENV === "production"
-        ? {
-            args: [
-              ...chromium.args,
-              "--no-sandbox",
-              "--disable-setuid-sandbox",
-            ],
-            executablePath: await chromium.executablePath(),
-            headless: true,
-          }
-        : {
-            headless: true,
-          }
-    );
+    let browser;
+    if (process.env.NODE_ENV === "production") {
+      const chromium = (await import("chrome-aws-lambda")).default;
+      browser = await puppeteer.launch({
+        args: chromium.args,
+        executablePath: await chromium.executablePath,
+        headless: true,
+        defaultViewport: chromium.defaultViewport,
+      });
+    } else {
+      browser = await puppeteer.launch({
+        headless: true,
+      });
+    }
 
     const page = await browser.newPage();
     await page.setContent(html, { waitUntil: "networkidle0" });
