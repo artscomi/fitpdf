@@ -2,25 +2,25 @@
 
 :root {
   /* Base colors */
-  --background: oklch(100% 0 0);
-  --foreground: oklch(20% 0 0);
+  --background: #ffffff;
+  --foreground: #171717;
   
   /* Brand colors */
-  --primary: oklch(55% 0.2 270);
-  --primary-dark: oklch(45% 0.2 270);
-  --primary-light: oklch(65% 0.2 270);
+  --primary: #7159b5;
+  --primary-dark: #5a4a8f;
+  --primary-light: #8a7bc5;
   
   /* Text colors */
-  --text-primary: oklch(20% 0 0);
-  --text-secondary: oklch(40% 0 0);
-  --text-tertiary: oklch(60% 0 0);
+  --text-primary: #171717;
+  --text-secondary: #4a4a4a;
+  --text-tertiary: #6b7280;
   
   /* UI colors */
-  --border: oklch(90% 0 0);
-  --input-bg: oklch(100% 0 0);
-  --input-border: oklch(80% 0 0);
-  --error: oklch(65% 0.2 25);
-  --error-light: oklch(95% 0.1 25);
+  --border: #e5e7eb;
+  --input-bg: #ffffff;
+  --input-border: #d1d5db;
+  --error: #ef4444;
+  --error-light: #fecaca;
 }
 
 @theme inline {
@@ -32,22 +32,22 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: oklch(10% 0 0);
-    --foreground: oklch(95% 0 0);
+    --background: #0a0a0a;
+    --foreground: #ededed;
     
     /* Brand colors remain the same */
     
     /* Text colors */
-    --text-primary: oklch(95% 0 0);
-    --text-secondary: oklch(80% 0 0);
-    --text-tertiary: oklch(65% 0 0);
+    --text-primary: #f3f4f6;
+    --text-secondary: #d1d5db;
+    --text-tertiary: #9ca3af;
     
     /* UI colors */
-    --border: oklch(30% 0 0);
-    --input-bg: oklch(20% 0 0);
-    --input-border: oklch(40% 0 0);
-    --error: oklch(70% 0.2 25);
-    --error-light: oklch(30% 0.1 25);
+    --border: #374151;
+    --input-bg: #1f2937;
+    --input-border: #4b5563;
+    --error: #f87171;
+    --error-light: #7f1d1d;
   }
 }
 
