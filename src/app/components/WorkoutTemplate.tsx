@@ -83,11 +83,11 @@ export default function WorkoutTemplate({
         <h2 className="section-title text-[1.5rem] font-semibold mb-5 pb-2 border-b-3 border-[#7159b5]">
           📋 Schema del Circuito
         </h2>
-        <div className="grid grid-cols-5 gap-3 mb-5">
+        <div className="flex flex-wrap gap-3 mb-5">
           {workoutProgram.exercises.map((exercise, index) => (
             <div
               key={index}
-              className="bg-[#f8f9fa] rounded-[10px] p-4 text-center border-2 border-[#e9ecef]"
+              className="bg-[#f8f9fa] rounded-[10px] p-4 text-center border-2 border-[#e9ecef] w-[100px]"
             >
               <div className="bg-[#7159b5] text-white w-[25px] h-[25px] rounded-full flex items-center justify-center font-semibold mx-auto mb-2">
                 {index + 1}
