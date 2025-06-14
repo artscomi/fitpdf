@@ -1,16 +1,26 @@
 import { NextResponse } from "next/server";
-import puppeteer from "puppeteer-core";
+import puppeteer from "puppeteer";
 import chromium from "@sparticuz/chromium";
 
 export async function POST(request: Request) {
   try {
     const { html, filename } = await request.json();
 
-    const browser = await puppeteer.launch({
-      args: chromium.args,
-      executablePath: await chromium.executablePath(),
-      headless: true,
-    });
+    const browser = await puppeteer.launch(
+      process.env.NODE_ENV === "production"
+        ? {
+            args: [
+              ...chromium.args,
+              "--no-sandbox",
+              "--disable-setuid-sandbox",
+            ],
+            executablePath: await chromium.executablePath(),
+            headless: true,
+          }
+        : {
+            headless: true,
+          }
+    );
 
     const page = await browser.newPage();
     await page.setContent(html, { waitUntil: "networkidle0" });
@@ -30,7 +40,7 @@ export async function POST(request: Request) {
     });
 
     const pdf = await page.pdf({
-      format: "A4",
+      format: "a4",
       printBackground: true,
       margin: {
         top: "20px",
