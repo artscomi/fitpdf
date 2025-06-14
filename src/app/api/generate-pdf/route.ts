@@ -24,17 +24,9 @@ export async function POST(request: Request) {
     await page.setContent(html, { waitUntil: "networkidle0" });
 
     // Aspetta che tutte le immagini siano caricate
-    await page.evaluate(() => {
-      return Promise.all(
-        Array.from(document.images)
-          .filter((img) => !img.complete)
-          .map(
-            (img) =>
-              new Promise((resolve) => {
-                img.onload = img.onerror = resolve;
-              })
-          )
-      );
+    await page.waitForFunction(() => {
+      const images = Array.from(document.images);
+      return images.every((img) => img.complete);
     });
 
     const pdf = await page.pdf({
