@@ -11,7 +11,7 @@ export async function POST(request: Request) {
       browser = await puppeteerCore.default.launch({
         args: ["--no-sandbox", "--disable-setuid-sandbox"],
         executablePath:
-          process.env.CHROME_EXECUTABLE_PATH || "/usr/bin/chromium-browser",
+          process.env.CHROME_EXECUTABLE_PATH || "/usr/bin/chromium",
         headless: true,
       });
     } else {
