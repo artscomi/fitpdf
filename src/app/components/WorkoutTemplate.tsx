@@ -157,6 +157,11 @@ const WorkoutTemplate: React.FC<WorkoutTemplateProps> = ({
                       borderRadius: "8px",
                       height: "auto",
                     }}
+                    onError={(e) => {
+                      // Se l'immagine di YouTube fallisce, usa l'immagine di fallback
+                      const target = e.target as HTMLImageElement;
+                      target.src = "/images/video-placeholder.jpg";
+                    }}
                   />
                   <div className="play-button">
                     <svg
@@ -249,7 +254,8 @@ const WorkoutTemplate: React.FC<WorkoutTemplateProps> = ({
 // Helper function to get YouTube thumbnail URL
 const getThumbnailUrl = (videoUrl: string): string => {
   const videoId = videoUrl.split("v=")[1]?.split("&")[0];
-  return videoId ? `https://img.youtube.com/vi/${videoId}/hqdefault.jpg` : "";
+  if (!videoId) return "/images/video-placeholder.svg";
+  return `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`;
 };
 
 // Safety items data
