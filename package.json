@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@react-pdf/renderer": "^4.3.0",
+    "@sparticuz/chromium": "^137.0.1",
     "chrome-aws-lambda": "10.1.0",
     "html-pdf-node": "^1.0.8",
     "html2canvas": "^1.4.1",
