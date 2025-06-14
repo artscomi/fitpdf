@@ -10,8 +10,7 @@ export async function POST(request: Request) {
       const puppeteerCore = await import("puppeteer-core");
       browser = await puppeteerCore.default.launch({
         args: ["--no-sandbox", "--disable-setuid-sandbox"],
-        executablePath:
-          process.env.CHROME_EXECUTABLE_PATH || "/usr/bin/chromium",
+        executablePath: "/usr/bin/google-chrome",
         headless: true,
       });
     } else {
