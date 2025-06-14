@@ -1,256 +1,342 @@
-"use client";
-
-interface ClientInfo {
-  name: string;
-  age: number;
-  weight: number;
-  height: number;
-  goals: string;
-  medicalConditions: string;
-}
-
-interface Exercise {
-  name: string;
-  sets: number;
-  reps: string;
-  rest: string;
-  notes: string;
-  videoUrl?: string;
-}
-
-interface WorkoutProgram {
-  exercises: Exercise[];
-}
+import React from "react";
+import "./WorkoutTemplate.css";
+import { Exercise } from "./TrainerForm";
+import Image from "next/image";
 
 interface WorkoutTemplateProps {
-  clientInfo: ClientInfo;
-  workoutProgram: WorkoutProgram;
+  exercises: Exercise[];
+  clientInfo?: {
+    name?: string;
+    age?: number;
+    weight?: number;
+    height?: number;
+    goals?: string;
+    medicalConditions?: string;
+  };
 }
 
-export default function WorkoutTemplate({
+const WorkoutTemplate: React.FC<WorkoutTemplateProps> = ({
+  exercises,
   clientInfo,
-  workoutProgram,
-}: WorkoutTemplateProps) {
+}) => {
   return (
-    <div className="container mx-auto max-w-[210mm] p-5 bg-white">
-      <div className="header bg-[#7159b5] text-white p-8 rounded-[15px] text-center mb-8">
-        <h1 className="text-[1.5rem] font-bold mb-2">
-          🏋️‍♀️ Programma di Allenamento Personalizzato
-        </h1>
-        <p className="text-[1.1rem] opacity-90 font-light">
-          Creato per {clientInfo.name}
-        </p>
+    <div>
+      <div className="header">
+        <h1>🏋️‍♀️ Guida Completa Workout Casa</h1>
+        <p>Circuito personalizzato per {clientInfo?.name}</p>
       </div>
 
-      {/* Informazioni Cliente */}
-      <div className="section mb-10 [page-break-inside:avoid]">
-        <h2 className="section-title text-[1.5rem] font-semibold mb-5 pb-2 border-b-3 border-[#7159b5]">
-          📋 Informazioni Cliente
-        </h2>
-        <div className="grid grid-cols-2 gap-4 bg-[#f8f9fa] p-5 rounded-[10px]">
-          <div>
-            <p>
-              <strong>Nome:</strong> {clientInfo.name}
-            </p>
-            <p>
-              <strong>Età:</strong> {clientInfo.age} anni
-            </p>
-            <p>
-              <strong>Peso:</strong> {clientInfo.weight} kg
-            </p>
-            <p>
-              <strong>Altezza:</strong> {clientInfo.height} cm
-            </p>
-          </div>
-          <div>
+      {clientInfo?.name && (
+        <div className="client-info">
+          <h2 className="section-title">👤 Informazioni Cliente</h2>
+          <div className="client-details">
+            {clientInfo.name && (
+              <div>
+                <strong>Nome:</strong> {clientInfo.name}
+              </div>
+            )}
+            {clientInfo.age && (
+              <div>
+                <strong>Età:</strong> {clientInfo.age} anni
+              </div>
+            )}
+            {clientInfo.weight && (
+              <div>
+                <strong>Peso:</strong> {clientInfo.weight} kg
+              </div>
+            )}
+            {clientInfo.height && (
+              <div>
+                <strong>Altezza:</strong> {clientInfo.height} cm
+              </div>
+            )}
             {clientInfo.goals && (
-              <div className="mb-4">
-                <h3 className="text-lg font-semibold mb-2">Obiettivi</h3>
-                <p className="text-gray-700">{clientInfo.goals}</p>
+              <div className="mt-2">
+                <strong>Obiettivi:</strong>
+                <p>{clientInfo.goals}</p>
               </div>
             )}
             {clientInfo.medicalConditions && (
-              <>
-                <p className="mt-2">
-                  <strong>Condizioni Mediche:</strong>
-                </p>
-                <p className="text-sm">{clientInfo.medicalConditions}</p>
-              </>
+              <div className="mt-2">
+                <strong>Condizioni Mediche:</strong>
+                <p>{clientInfo.medicalConditions}</p>
+              </div>
             )}
+          </div>
+        </div>
+      )}
+
+      {/* Schema Circuito */}
+      <div className="section">
+        <h2 className="section-title">📋 Schema del Circuito</h2>
+        <div className="circuit-grid">
+          {exercises.map((exercise, index) => (
+            <div key={index} className="exercise-card">
+              <div className="exercise-number">{index + 1}</div>
+              <div className="exercise-name">{exercise.name}</div>
+            </div>
+          ))}
+        </div>
+
+        <div className="highlight">
+          ⏱ Recupero tra esercizi: 1 minuto e 30 secondi
+        </div>
+      </div>
+
+      {/* Progressione */}
+      <div className="section">
+        <h2 className="section-title">📊 Progressione Settimanale</h2>
+        <div className="progression-table">
+          <div className="table-header">
+            <span>Settimana</span>
+            <span>Serie</span>
+            <span>Ripetizioni</span>
+            <span>Note</span>
+          </div>
+          <div className="table-row">
+            <span>
+              <strong>1-2</strong>
+            </span>
+            <span>2</span>
+            <span>10</span>
+            <span>Focus sulla tecnica corretta</span>
+          </div>
+          <div className="table-row">
+            <span>
+              <strong>3</strong>
+            </span>
+            <span>2</span>
+            <span>15</span>
+            <span>Aumenta le ripetizioni</span>
+          </div>
+          <div className="table-row">
+            <span>
+              <strong>4+</strong>
+            </span>
+            <span>3</span>
+            <span>15</span>
+            <span>Aggiunge una serie extra</span>
           </div>
         </div>
       </div>
 
-      {/* Schema Circuito */}
-      <div className="section mb-10 [page-break-inside:avoid]">
-        <h2 className="section-title text-[1.5rem] font-semibold mb-5 pb-2 border-b-3 border-[#7159b5]">
-          📋 Schema del Circuito
-        </h2>
-        <div className="flex flex-wrap gap-3 mb-5">
-          {workoutProgram.exercises.map((exercise, index) => (
-            <div
-              key={index}
-              className="bg-[#f8f9fa] rounded-[10px] p-4 text-center border-2 border-[#e9ecef] w-[100px]"
-            >
-              <div className="bg-[#7159b5] text-white w-[25px] h-[25px] rounded-full flex items-center justify-center font-semibold mx-auto mb-2">
-                {index + 1}
-              </div>
-              <div className="font-medium text-sm">{exercise.name}</div>
-            </div>
-          ))}
-        </div>
-      </div>
+      {/* Esercizi Dettagliati */}
+      <div className="section">
+        <h2 className="section-title">🎥 Esercizi con Video Tutorial</h2>
 
-      {/* Dettagli Esercizi */}
-      <div className="section mb-10 [page-break-inside:avoid]">
-        <h2 className="section-title text-[1.5rem] font-semibold mb-5 pb-2 border-b-3 border-[#7159b5]">
-          🎥 Dettagli Esercizi
-        </h2>
-        {workoutProgram.exercises.map((exercise, index) => (
-          <div
-            key={index}
-            className="bg-[#f8f9fa] rounded-[10px] p-5 mb-5 border-l-4 border-[#7159b5] [page-break-inside:avoid]"
-          >
-            <div className="flex items-center gap-4 mb-4">
-              <div className="bg-[#7159b5] text-white w-[40px] h-[40px] rounded-full flex items-center justify-center font-semibold text-lg">
-                {index + 1}
-              </div>
-              <div className="font-semibold text-lg">{exercise.name}</div>
+        {exercises.map((exercise, index) => (
+          <div key={index} className="exercise-detail">
+            <div className="exercise-header">
+              <div className="exercise-icon">{index + 1}</div>
+              <div className="exercise-title">{exercise.name}</div>
             </div>
 
-            <div className="grid grid-cols-2 gap-4 mb-4">
-              <div>
-                <p>
-                  <strong>Serie:</strong> {exercise.sets}
-                </p>
-                <p>
-                  <strong>Ripetizioni:</strong> {exercise.reps}
-                </p>
-                <p>
-                  <strong>Recupero:</strong> {exercise.rest}
-                </p>
-              </div>
+            <div className="exercise-details">
+              {exercise.sets && <span>Serie: {exercise.sets}</span>}
+              {exercise.reps && <span>Ripetizioni: {exercise.reps}</span>}
+              {exercise.rest && <span>Recupero: {exercise.rest}</span>}
             </div>
+
             {exercise.videoUrl && (
-              <div className="mt-4">
+              <div className="video-section">
+                <div className="video-title">📺 Video di riferimento:</div>
                 <a
                   href={exercise.videoUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="block"
+                  className="video-thumbnail-container"
                 >
-                  <div className="relative w-full aspect-video rounded-lg overflow-hidden bg-[#f3f4f6]">
-                    <img
-                      src={`https://img.youtube.com/vi/${getYouTubeVideoId(
-                        exercise.videoUrl || ""
-                      )}/maxresdefault.jpg`}
-                      alt={`Video tutorial per ${exercise.name}`}
-                      className="w-full h-full object-cover"
-                      onError={(e) => {
-                        const target = e.target as HTMLImageElement;
-                        target.src = `https://img.youtube.com/vi/${getYouTubeVideoId(
-                          exercise.videoUrl || ""
-                        )}/hqdefault.jpg`;
-                      }}
-                    />
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <div className="w-16 h-16 bg-[#dc2626] rounded-full flex items-center justify-center">
-                        <svg
-                          className="w-8 h-8 text-white"
-                          fill="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path d="M8 5v14l11-7z" />
-                        </svg>
-                      </div>
-                    </div>
+                  <Image
+                    src={getThumbnailUrl(exercise.videoUrl)}
+                    alt={exercise.name}
+                    width={480}
+                    height={360}
+                    style={{
+                      width: "100%",
+                      maxWidth: "480px",
+                      borderRadius: "8px",
+                      height: "auto",
+                    }}
+                  />
+                  <div className="play-button">
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path d="M8 5v14l11-7z" fill="#FFFFFF" />
+                    </svg>
                   </div>
-                </a>
-                <a
-                  href={exercise.videoUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="mt-2 text-[#2563eb] hover:text-[#1d4ed8] text-sm flex items-center gap-1"
-                >
-                  <svg
-                    className="w-4 h-4"
-                    fill="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path d="M8 5v14l11-7z" />
-                  </svg>
-                  Guarda il video tutorial
                 </a>
               </div>
             )}
+
             {exercise.notes && (
-              <div className="mt-4">
-                <p>
-                  <strong>Note:</strong>
-                </p>
-                <p className="text-sm">{exercise.notes}</p>
+              <div className="execution-section">
+                <div className="execution-title">Note:</div>
+                <p>{exercise.notes}</p>
               </div>
+            )}
+
+            {exercise.muscleGroup && (
+              <div className="muscles">💪 {exercise.muscleGroup}</div>
             )}
           </div>
         ))}
       </div>
 
-      {/* Note sulla Sicurezza */}
-      <div className="bg-[#7159b5] rounded-[10px] p-5 mb-10 [page-break-inside:avoid]">
-        <h3 className="text-white text-xl font-semibold mb-4">
-          ⚠️ Note Importanti sulla Sicurezza
-        </h3>
-        <div className="grid grid-cols-1 gap-4">
-          <div className="bg-white p-4 rounded-[8px]">
-            <h4 className="font-semibold mb-2">🔥 Prima di Iniziare:</h4>
-            <ul className="list-none pl-5">
-              <li className="mb-1">
-                • Riscaldamento: 5-10 minuti di marcia sul posto
-              </li>
-              <li className="mb-1">
-                • Idratazione: Bevi acqua prima, durante e dopo
-              </li>
-              <li className="mb-1">
-                • Respirazione: Non trattenere mai il respiro
-              </li>
-            </ul>
-          </div>
-          <div className="bg-white p-4 rounded-[8px]">
-            <h4 className="font-semibold mb-2">💯 Durante l'Esercizio:</h4>
-            <ul className="list-none pl-5">
-              <li className="mb-1">
-                • Forma prima di tutto: Tecnica corretta sempre
-              </li>
-              <li className="mb-1">
-                • Dolore vs. Fatica: Fermati se senti dolore acuto
-              </li>
-              <li className="mb-1">
-                • Progressione graduale: Aumenta intensità gradualmente
-              </li>
-            </ul>
-          </div>
+      {/* Sicurezza */}
+      <div className="safety-section">
+        <h3 className="safety-title">⚠️ Note Importanti sulla Sicurezza</h3>
+        <div className="safety-grid">
+          {safetyItems.map((item, index) => (
+            <div key={index} className="safety-item">
+              <h4>{item.title}</h4>
+              <ul>
+                {item.points.map((point, pointIndex) => (
+                  <li key={pointIndex}>{point}</li>
+                ))}
+              </ul>
+            </div>
+          ))}
         </div>
       </div>
 
-      <div className="bg-[#7159b5] text-white p-5 rounded-[10px] text-center [page-break-inside:avoid]">
-        <p className="text-lg">
-          🏆 Ricorda: la costanza è la chiave del successo!
-        </p>
+      {/* Piano di Progressione */}
+      <div className="progression-plan">
+        <h3 className="progression-title">
+          🏆 Piano di Progressione a Lungo Termine
+        </h3>
+
+        {progressionItems.map((item, index) => (
+          <div key={index} className="progression-item">
+            <h4>{item.title}</h4>
+            <ul>
+              {item.points.map((point, pointIndex) => (
+                <li key={pointIndex}>{point}</li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+
+      {/* Camminate Veloce */}
+      <div className="progression-plan">
+        <h3 className="progression-title">
+          🚶‍♀️ Attività Complementare: Camminata Veloce
+        </h3>
+
+        {walkingItems.map((item, index) => (
+          <div key={index} className="progression-item">
+            <h4>{item.title}</h4>
+            <ul>
+              {item.points.map((point, pointIndex) => (
+                <li key={pointIndex}>{point}</li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+
+      <div className="highlight">
+        🏆 Ricorda: la costanza è la chiave del successo! Programma di
+        allenamento per circuito casalingo.
       </div>
     </div>
   );
-}
+};
 
-function getYouTubeVideoId(url: string): string {
-  if (!url) return "";
+// Helper function to get YouTube thumbnail URL
+const getThumbnailUrl = (videoUrl: string): string => {
+  const videoId = videoUrl.split("v=")[1]?.split("&")[0];
+  return videoId ? `https://img.youtube.com/vi/${videoId}/hqdefault.jpg` : "";
+};
 
-  try {
-    const regExp =
-      /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/;
-    const match = url.match(regExp);
-    return match && match[7].length === 11 ? match[7] : "";
-  } catch (error) {
-    console.error("Error parsing YouTube URL:", error);
-    return "";
-  }
-}
+// Safety items data
+const safetyItems = [
+  {
+    title: "🔥 Prima di Iniziare:",
+    points: [
+      "Riscaldamento: 5-10 minuti di marcia sul posto",
+      "Idratazione: Bevi acqua prima, durante e dopo",
+      "Respirazione: Non trattenere mai il respiro",
+    ],
+  },
+  {
+    title: "💯 Durante l'Esercizio:",
+    points: [
+      "Forma prima di tutto: Tecnica corretta sempre",
+      "Dolore vs. Fatica: Fermati se senti dolore acuto",
+      "Progressione graduale: Aumenta intensità gradualmente",
+    ],
+  },
+  {
+    title: "🧘‍♀️ Dopo l'Allenamento:",
+    points: [
+      "Stretching: 5-10 minuti di allungamento",
+      "Recupero: Rispetta i giorni di riposo",
+      "Monitoraggio: Tieni traccia dei progressi",
+    ],
+  },
+];
+
+// Progression items data
+const progressionItems = [
+  {
+    title: "Mesi 1-2: Fondamenta",
+    points: [
+      "Focus sulla tecnica corretta",
+      "Costruzione della resistenza base",
+      "Abitudine all'allenamento regolare",
+    ],
+  },
+  {
+    title: "Mesi 3-4: Sviluppo",
+    points: [
+      "Aumento delle ripetizioni",
+      "Introduzione di varianti più impegnative",
+      "Miglioramento della forza",
+    ],
+  },
+  {
+    title: "Mesi 5+: Perfezionamento",
+    points: [
+      "Combinazioni di esercizi più complesse",
+      "Tempi di recupero ridotti",
+      "Introduzione di nuove sfide",
+    ],
+  },
+];
+
+// Walking items data
+const walkingItems = [
+  {
+    title: "Programma Settimanale",
+    points: [
+      "3 giorni a settimana nei giorni di riposo dall'allenamento",
+      "Durata: 50 minuti per sessione",
+      "Velocità: 5-6 km/h (passo sostenuto)",
+      "Orario consigliato: mattina o tardo pomeriggio",
+    ],
+  },
+  {
+    title: "Benefici",
+    points: [
+      "Migliora la circolazione e la salute cardiovascolare",
+      "Aiuta il recupero muscolare",
+      "Mantiene attivo il metabolismo",
+      "Supporta la perdita di peso",
+    ],
+  },
+  {
+    title: "Consigli",
+    points: [
+      "Indossa scarpe comode e adatte alla camminata",
+      "Mantieni una postura corretta durante la camminata",
+      "Idratati prima, durante e dopo l'attività",
+      "Usa un'app o un contapassi per monitorare la velocità",
+    ],
+  },
+];
+
+export default WorkoutTemplate;

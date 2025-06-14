@@ -6,13 +6,14 @@ import TextArea from "./TextArea";
 import WorkoutTemplate from "./WorkoutTemplate";
 import { generatePDF } from "../utils/pdfGenerator";
 
-interface Exercise {
+export interface Exercise {
   name: string;
   sets: number;
   reps: string;
   rest: string;
   notes: string;
   videoUrl?: string;
+  muscleGroup: string;
 }
 
 interface FormData {
@@ -55,6 +56,7 @@ export default function TrainerForm() {
         notes:
           "Mantieni la schiena dritta e le ginocchia allineate con le punte dei piedi",
         videoUrl: "",
+        muscleGroup: "Quadricipiti • Glutei • Femorali • Polpacci",
       },
     ],
   });
@@ -94,6 +96,7 @@ export default function TrainerForm() {
           rest: "1'30",
           notes: "",
           videoUrl: "",
+          muscleGroup: "",
         },
       ],
     }));
@@ -187,7 +190,7 @@ export default function TrainerForm() {
   };
 
   return (
-    <div className="container mx-auto px-0 sm:px-4 py-2 sm:py-4 overflow-hidden">
+    <div className="mx-auto px-0 sm:px-4 py-2 sm:py-4 overflow-hidden">
       {/* Preview Toggle Button - Mobile Only */}
       <div className="lg:hidden fixed bottom-0 left-0 right-0 z-[9999]">
         <button
@@ -465,15 +468,13 @@ export default function TrainerForm() {
               <WorkoutTemplate
                 clientInfo={{
                   name: formData.clientName,
-                  age: parseInt(formData.clientAge) || 0,
-                  weight: parseInt(formData.clientWeight) || 0,
-                  height: parseInt(formData.clientHeight) || 0,
-                  goals: formData.clientGoals,
-                  medicalConditions: formData.medicalConditions,
+                  age: parseInt(formData.clientAge) || undefined,
+                  weight: parseInt(formData.clientWeight) || undefined,
+                  height: parseInt(formData.clientHeight) || undefined,
+                  goals: formData.clientGoals || undefined,
+                  medicalConditions: formData.medicalConditions || undefined,
                 }}
-                workoutProgram={{
-                  exercises: formData.exercises,
-                }}
+                exercises={formData.exercises}
               />
             </div>
           </div>
