@@ -11,7 +11,7 @@
   --primary-light: #8a7bc5;
   
   /* Text colors */
-  --text-primary: #171717;
+  --text-primary: #333333;
   --text-secondary: #4a4a4a;
   --text-tertiary: #6b7280;
   
@@ -28,27 +28,6 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-    
-    /* Brand colors remain the same */
-    
-    /* Text colors */
-    --text-primary: #f3f4f6;
-    --text-secondary: #d1d5db;
-    --text-tertiary: #9ca3af;
-    
-    /* UI colors */
-    --border: #374151;
-    --input-bg: #1f2937;
-    --input-border: #4b5563;
-    --error: #f87171;
-    --error-light: #7f1d1d;
-  }
 }
 
 body {
