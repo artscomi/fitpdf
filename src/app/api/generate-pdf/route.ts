@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
 import puppeteer from "puppeteer";
-import puppeteerCore from "puppeteer-core";
 
 export async function POST(request: Request) {
   try {
@@ -8,7 +7,8 @@ export async function POST(request: Request) {
 
     let browser;
     if (process.env.NODE_ENV === "production") {
-      browser = await puppeteerCore.launch({
+      const puppeteerCore = await import("puppeteer-core");
+      browser = await puppeteerCore.default.launch({
         args: ["--no-sandbox", "--disable-setuid-sandbox"],
         executablePath:
           process.env.CHROME_EXECUTABLE_PATH || "/usr/bin/chromium-browser",
