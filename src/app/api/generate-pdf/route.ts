@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import puppeteer from "puppeteer";
+import puppeteerCore from "puppeteer-core";
 
 export async function POST(request: Request) {
   try {
@@ -7,12 +8,11 @@ export async function POST(request: Request) {
 
     let browser;
     if (process.env.NODE_ENV === "production") {
-      const chromium = (await import("chrome-aws-lambda")).default;
-      browser = await puppeteer.launch({
-        args: chromium.args,
-        executablePath: await chromium.executablePath,
+      browser = await puppeteerCore.launch({
+        args: ["--no-sandbox", "--disable-setuid-sandbox"],
+        executablePath:
+          process.env.CHROME_EXECUTABLE_PATH || "/usr/bin/chromium-browser",
         headless: true,
-        defaultViewport: chromium.defaultViewport,
       });
     } else {
       browser = await puppeteer.launch({
