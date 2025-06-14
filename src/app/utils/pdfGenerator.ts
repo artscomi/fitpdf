@@ -1,38 +1,72 @@
-export const generatePDF = async (element: HTMLElement, filename: string) => {
-  console.log("Starting PDF generation...");
-  console.log("Element to convert:", element);
-
+export async function generatePDF(
+  element: HTMLElement,
+  filename: string
+): Promise<boolean> {
   try {
-    const html2pdf = (await import("html2pdf.js")).default;
+    // Crea una nuova finestra
+    const printWindow = window.open("", "_blank");
+    if (!printWindow) {
+      throw new Error("Impossibile aprire la finestra di stampa");
+    }
 
-    const opt = {
-      margin: 10,
-      filename: `${filename}.pdf`,
-      image: { type: "jpeg", quality: 0.98 },
-      html2canvas: {
-        scale: 2,
-        useCORS: true,
-        logging: true,
-        letterRendering: true,
-      },
-      jsPDF: {
-        unit: "mm",
-        format: "a4",
-        orientation: "portrait",
-        compress: true,
-      },
-      pagebreak: { mode: ["avoid-all", "css", "legacy"] },
+    // Raccogli tutti gli stili dal documento originale
+    const styles = Array.from(document.styleSheets)
+      .map((styleSheet) => {
+        try {
+          return Array.from(styleSheet.cssRules)
+            .map((rule) => rule.cssText)
+            .join("\n");
+        } catch {
+          // Se non possiamo accedere alle regole (CORS), prova a ottenere l'href
+          if (styleSheet.href) {
+            return `<link rel="stylesheet" href="${styleSheet.href}">`;
+          }
+          return "";
+        }
+      })
+      .join("\n");
+
+    // Prepara l'HTML con tutti gli stili necessari
+    const html = `
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <title>${filename}</title>
+          <meta charset="utf-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1">
+          <style>
+            ${styles}
+            body {
+              margin: 0;
+              padding: 20px;
+              font-family: system-ui, -apple-system, sans-serif;
+            }
+            @media print {
+              body {
+                padding: 0;
+              }
+            }
+          </style>
+        </head>
+        <body>
+          ${element.outerHTML}
+        </body>
+      </html>
+    `;
+
+    // Scrivi l'HTML nella nuova finestra
+    printWindow.document.write(html);
+    printWindow.document.close();
+
+    // Aspetta che il contenuto sia caricato
+    printWindow.onload = () => {
+      // Apri il dialogo di stampa
+      printWindow.print();
     };
 
-    console.log("Generating PDF with options:", opt);
-    const pdf = html2pdf().set(opt);
-    console.log("PDF object created");
-
-    await pdf.from(element).save();
-    console.log("PDF generated successfully");
     return true;
   } catch (error) {
-    console.error("Error generating PDF:", error);
+    console.error("Errore durante la generazione del PDF:", error);
     return false;
   }
-};
+}
