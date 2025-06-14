@@ -1,0 +1,1139 @@
+<!DOCTYPE html>
+<html lang="it">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Guida Completa Workout Casa</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        /* Colors */
+        --color-primary: #7159b5;
+        --color-text-dark: #333333;
+        --color-text-light: #ffffff;
+        --color-bg-light: #f8f9fa;
+        --color-bg-white: #fefcfb;
+
+        /* Spacing */
+        --spacing-xs: 8px;
+        --spacing-sm: 15px;
+        --spacing-md: 20px;
+        --spacing-lg: 25px;
+        --spacing-xl: 30px;
+
+        /* Border Radius */
+        --radius-sm: 8px;
+        --radius-md: 10px;
+        --radius-lg: 15px;
+
+        /* Font Sizes */
+        --text-xs: 0.8rem;
+        --text-sm: 0.9rem;
+        --text-base: 1rem;
+        --text-lg: 1.2rem;
+        --text-xl: 1.3rem;
+        --text-2xl: 1.5rem;
+        --text-3xl: 2.5rem;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Poppins", sans-serif;
+        line-height: 1.6;
+        color: var(--color-text-dark);
+        background: var(--color-text-light);
+        font-size: 14px;
+      }
+
+      .container {
+        max-width: 210mm;
+        margin: 0 auto;
+        padding: var(--spacing-md);
+        background: var(--color-text-light);
+      }
+
+      .header {
+        background: var(--color-primary);
+        color: var(--color-text-light);
+        padding: var(--spacing-xl);
+        text-align: center;
+        border-radius: var(--radius-lg);
+        margin-bottom: var(--spacing-xl);
+        page-break-inside: avoid;
+      }
+
+      .header h1 {
+        font-size: var(--text-3xl);
+        font-weight: 700;
+        margin-bottom: var(--spacing-xs);
+      }
+
+      .header p {
+        font-size: 1.1rem;
+        opacity: 0.9;
+        font-weight: 300;
+      }
+
+      .section {
+        margin-bottom: 40px;
+        page-break-inside: avoid;
+      }
+
+      .section-title {
+        font-size: var(--text-2xl);
+        font-weight: 600;
+        color: var(--color-text-dark);
+        margin-bottom: var(--spacing-md);
+        padding-bottom: var(--spacing-xs);
+        border-bottom: 3px solid var(--color-primary);
+      }
+
+      .circuit-grid {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 10px;
+        margin-bottom: 20px;
+      }
+
+      .exercise-card {
+        background: var(--color-bg-light);
+        border-radius: var(--radius-md);
+        padding: var(--spacing-sm);
+        text-align: center;
+        border: 2px solid #e9ecef;
+        font-size: var(--text-xs);
+      }
+
+      .exercise-number {
+        background: var(--color-primary);
+        color: var(--color-text-light);
+        width: 25px;
+        height: 25px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 600;
+        margin: 0 auto var(--spacing-xs);
+        font-size: var(--text-xs);
+      }
+
+      .exercise-name {
+        font-weight: 500;
+        color: var(--color-text-dark);
+        font-size: var(--text-xs);
+      }
+
+      .progression-table {
+        background: var(--color-bg-light);
+        border-radius: var(--radius-md);
+        padding: var(--spacing-md);
+        margin: var(--spacing-md) 0;
+      }
+
+      .table-header {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr 2fr;
+        gap: 15px;
+        font-weight: 600;
+        color: var(--color-text-dark);
+        padding: 10px 0;
+        border-bottom: 2px solid #e9ecef;
+        margin-bottom: 15px;
+      }
+
+      .table-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr 2fr;
+        gap: 15px;
+        padding: 8px 0;
+        border-bottom: 1px solid #e9ecef;
+      }
+
+      .table-row:last-child {
+        border-bottom: none;
+      }
+
+      .highlight {
+        background: var(--color-primary);
+        color: var(--color-text-light);
+        padding: var(--spacing-md);
+        border-radius: var(--radius-md);
+        text-align: center;
+        font-weight: 500;
+        margin: var(--spacing-md) 0;
+      }
+
+      .exercise-detail {
+        background: var(--color-bg-light);
+        border-radius: var(--radius-md);
+        padding: var(--spacing-md);
+        margin: var(--spacing-md) 0;
+        border-left: 4px solid var(--color-primary);
+        page-break-inside: avoid;
+      }
+
+      .exercise-header {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        margin-bottom: var(--spacing-md);
+      }
+
+      .exercise-icon {
+        background: var(--color-primary);
+        color: var(--color-text-light);
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 600;
+        font-size: var(--text-lg);
+        flex-shrink: 0;
+      }
+
+      .exercise-title {
+        font-weight: 600;
+        color: var(--color-text-dark);
+        font-size: var(--text-lg);
+      }
+
+      .video-section {
+        background: var(--color-bg-white);
+        border-radius: var(--radius-md);
+        padding: var(--spacing-md);
+        margin: var(--spacing-md) 0;
+      }
+
+      .video-title {
+        font-weight: 600;
+        color: var(--color-text-dark);
+        margin-bottom: var(--spacing-sm);
+        display: flex;
+        align-items: center;
+        gap: var(--spacing-xs);
+      }
+
+      .video-link {
+        display: block;
+        margin-top: var(--spacing-sm);
+        padding: var(--spacing-sm);
+        background: var(--color-bg-light);
+        border-radius: var(--radius-sm);
+        color: var(--color-primary);
+        text-decoration: none;
+        font-weight: 500;
+        text-align: center;
+      }
+
+      .video-link:hover {
+        background: var(--color-primary);
+        color: var(--color-text-light);
+      }
+
+      .video-list {
+        list-style: none;
+        padding: 0;
+      }
+
+      .video-list li {
+        padding: 5px 0;
+        color: var(--color-text-dark);
+        padding-left: 20px;
+        position: relative;
+      }
+
+      .video-list li:before {
+        content: "📺";
+        position: absolute;
+        left: 0;
+      }
+
+      .execution-section {
+        margin: var(--spacing-md) 0;
+      }
+
+      .execution-title {
+        font-weight: 600;
+        color: var(--color-text-dark);
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .execution-steps {
+        list-style: none;
+        padding: 0;
+      }
+
+      .execution-steps li {
+        padding: 8px 0;
+        padding-left: 25px;
+        position: relative;
+        color: var(--color-text-dark);
+      }
+
+      .execution-steps li:before {
+        content: "✓";
+        position: absolute;
+        left: 0;
+        color: var(--color-primary);
+        font-weight: 600;
+      }
+
+      .muscles {
+        background: var(--color-primary);
+        color: var(--color-text-light);
+        padding: 8px 15px;
+        border-radius: var(--radius-md);
+        font-size: var(--text-sm);
+        font-weight: 500;
+        display: inline-block;
+        margin-top: var(--spacing-xs);
+      }
+
+      .safety-section {
+        background: var(--color-primary);
+        border-radius: var(--radius-md);
+        padding: var(--spacing-md);
+        margin: var(--spacing-xl) 0;
+        page-break-inside: avoid;
+      }
+
+      .safety-title {
+        color: var(--color-text-light);
+        margin-bottom: var(--spacing-sm);
+        font-weight: 600;
+        font-size: var(--text-xl);
+      }
+
+      .safety-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: var(--spacing-sm);
+      }
+
+      .safety-item {
+        background: var(--color-bg-white);
+        padding: var(--spacing-sm);
+        border-radius: var(--radius-sm);
+      }
+
+      .safety-item h4 {
+        color: var(--color-text-dark);
+        margin-bottom: var(--spacing-xs);
+        font-weight: 600;
+      }
+
+      .safety-item ul {
+        list-style: none;
+        padding: 0;
+      }
+
+      .safety-item li {
+        padding: 2px 0;
+        padding-left: var(--spacing-md);
+        position: relative;
+        font-size: var(--text-sm);
+        color: var(--color-text-dark);
+      }
+
+      .safety-item li:before {
+        content: "•";
+        position: absolute;
+        left: 0;
+        color: var(--color-text-dark);
+        font-weight: bold;
+      }
+
+      .resources-section {
+        background: var(--color-bg-light);
+        border-radius: var(--radius-md);
+        padding: var(--spacing-md);
+        margin: var(--spacing-xl) 0;
+      }
+
+      .resources-title {
+        font-weight: 600;
+        color: var(--color-text-dark);
+        margin-bottom: var(--spacing-sm);
+        font-size: var(--text-lg);
+      }
+
+      .resources-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 15px;
+      }
+
+      .resource-item {
+        background: var(--color-bg-white);
+        padding: var(--spacing-sm);
+        border-radius: var(--radius-sm);
+        border: 1px solid #e9ecef;
+      }
+
+      .resource-item h4 {
+        color: var(--color-text-dark);
+        margin-bottom: var(--spacing-xs);
+        font-weight: 600;
+        font-size: var(--text-sm);
+      }
+
+      .resource-item ul {
+        list-style: none;
+        padding: 0;
+      }
+
+      .resource-item li {
+        padding: 2px 0;
+        font-size: var(--text-xs);
+        color: var(--color-text-dark);
+      }
+
+      .progression-plan {
+        background: var(--color-bg-light);
+        border-radius: var(--radius-md);
+        padding: var(--spacing-lg);
+        margin: var(--spacing-xl) 0;
+      }
+
+      .progression-title {
+        font-weight: 600;
+        color: var(--color-text-dark);
+        margin-bottom: var(--spacing-md);
+        font-size: var(--text-xl);
+      }
+
+      .progression-item {
+        margin-bottom: var(--spacing-sm);
+        padding: var(--spacing-sm);
+        background: var(--color-bg-white);
+        border-radius: var(--radius-sm);
+      }
+
+      .progression-item h4 {
+        color: var(--color-text-dark);
+        margin-bottom: var(--spacing-xs);
+        font-weight: 600;
+      }
+
+      .progression-item ul {
+        list-style: none;
+        padding: 0;
+      }
+
+      .progression-item li {
+        padding: 3px 0;
+        padding-left: var(--spacing-md);
+        position: relative;
+        font-size: var(--text-sm);
+        color: var(--color-text-dark);
+      }
+
+      .progression-item li:before {
+        content: "→";
+        position: absolute;
+        left: 0;
+        color: var(--color-primary);
+        font-weight: bold;
+      }
+
+      @media print {
+        body {
+          font-size: 12px;
+          -webkit-print-color-adjust: exact !important;
+          print-color-adjust: exact !important;
+          color-adjust: exact !important;
+          orphans: 3;
+          widows: 3;
+        }
+
+        .container {
+          max-width: none;
+          padding: var(--spacing-md);
+        }
+
+        .section {
+          page-break-inside: avoid;
+        }
+
+        .exercise-detail {
+          page-break-inside: avoid;
+        }
+
+        /* Prevenzione righe orfane per liste e paragrafi */
+        p,
+        li,
+        .execution-steps li,
+        .safety-item li,
+        .progression-item li {
+          orphans: 3;
+          widows: 3;
+        }
+
+        /* Prevenzione righe orfane per titoli */
+        h1,
+        h2,
+        h3,
+        h4,
+        .section-title,
+        .exercise-title {
+          page-break-after: avoid;
+          orphans: 3;
+          widows: 3;
+        }
+
+        /* Prevenzione righe orfane per sezioni importanti */
+        .exercise-detail,
+        .safety-section,
+        .progression-plan {
+          page-break-inside: avoid;
+          orphans: 3;
+          widows: 3;
+        }
+
+        /* Forza la visualizzazione dei colori di sfondo */
+        .header,
+        .exercise-number,
+        .muscles,
+        .safety-section,
+        .highlight {
+          -webkit-print-color-adjust: exact !important;
+          print-color-adjust: exact !important;
+          color-adjust: exact !important;
+          background-color: var(--color-primary) !important;
+        }
+
+        .progression-plan,
+        .exercise-card,
+        .progression-table,
+        .exercise-detail,
+        .resources-section {
+          -webkit-print-color-adjust: exact !important;
+          print-color-adjust: exact !important;
+          color-adjust: exact !important;
+          background-color: var(--color-bg-light) !important;
+        }
+
+        .progression-item,
+        .safety-item,
+        .resource-item,
+        .video-section {
+          -webkit-print-color-adjust: exact !important;
+          print-color-adjust: exact !important;
+          color-adjust: exact !important;
+          background-color: var(--color-bg-white) !important;
+        }
+
+        /* Mantiene le ultime due sezioni insieme */
+        .safety-section {
+          page-break-inside: avoid;
+          page-break-after: avoid;
+        }
+
+        .progression-plan {
+          page-break-inside: avoid;
+          page-break-before: avoid;
+          page-break-after: avoid;
+        }
+
+        /* Wrapper per le ultime due sezioni */
+        .safety-section + .progression-plan {
+          page-break-before: avoid;
+        }
+
+        /* Forza la sezione progressione su una nuova pagina se necessario */
+        .progression-plan {
+          break-inside: avoid;
+          break-before: auto;
+          break-after: avoid;
+        }
+
+        /* Regole più stringenti per la sezione progressione */
+        .progression-plan {
+          page-break-inside: avoid !important;
+          break-inside: avoid !important;
+          display: block !important;
+        }
+
+        .progression-item {
+          page-break-inside: avoid !important;
+          break-inside: avoid !important;
+        }
+
+        /* Stile per i link nella stampa */
+        a {
+          text-decoration: underline !important;
+          color: var(--color-primary) !important;
+        }
+
+        a[href]:after {
+          content: " (" attr(href) ")" !important;
+          font-size: 0.8em;
+          color: var(--color-primary) !important;
+        }
+
+        /* Nascondi l'URL per i link interni */
+        a[href^="#"]:after {
+          content: "" !important;
+        }
+
+        /* Stile per le immagini cliccabili */
+        a img {
+          border: 1px solid var(--color-primary) !important;
+        }
+
+        .video-link {
+          border: 1px solid var(--color-primary);
+          margin-top: var(--spacing-sm);
+        }
+
+        /* Regole specifiche per la stampa multipla */
+        @page {
+          size: A4;
+          margin: 1cm;
+        }
+
+        /* Forza la visualizzazione corretta delle thumbnail in stampa multipla */
+        .video-section a {
+          display: block !important;
+          position: relative !important;
+          z-index: 1 !important;
+        }
+
+        .video-section img {
+          max-width: 100% !important;
+          height: auto !important;
+          display: block !important;
+          margin: 0 auto !important;
+        }
+
+        /* Assicura che i link rimangano cliccabili */
+        .video-section a[href] {
+          pointer-events: auto !important;
+          cursor: pointer !important;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <h1>🏋️‍♀️ Guida Completa Workout Casa</h1>
+        <p>Il tuo circuito personalizzato con video tutorial</p>
+      </div>
+
+      <!-- Schema Circuito -->
+      <div class="section">
+        <h2 class="section-title">📋 Schema del Circuito</h2>
+        <div class="circuit-grid">
+          <div class="exercise-card">
+            <div class="exercise-number">1</div>
+            <div class="exercise-name">Piegamenti</div>
+          </div>
+          <div class="exercise-card">
+            <div class="exercise-number">2</div>
+            <div class="exercise-name">Squat</div>
+          </div>
+          <div class="exercise-card">
+            <div class="exercise-number">3</div>
+            <div class="exercise-name">Rematore</div>
+          </div>
+          <div class="exercise-card">
+            <div class="exercise-number">4</div>
+            <div class="exercise-name">Affondi</div>
+          </div>
+          <div class="exercise-card">
+            <div class="exercise-number">5</div>
+            <div class="exercise-name">Alzate Laterali</div>
+          </div>
+          <div class="exercise-card">
+            <div class="exercise-number">6</div>
+            <div class="exercise-name">Squat</div>
+          </div>
+          <div class="exercise-card">
+            <div class="exercise-number">7</div>
+            <div class="exercise-name">Tricipiti</div>
+          </div>
+          <div class="exercise-card">
+            <div class="exercise-number">8</div>
+            <div class="exercise-name">Affondi</div>
+          </div>
+          <div class="exercise-card">
+            <div class="exercise-number">9</div>
+            <div class="exercise-name">Curl Bicipiti</div>
+          </div>
+          <div class="exercise-card">
+            <div class="exercise-number">10</div>
+            <div class="exercise-name">Squat</div>
+          </div>
+        </div>
+
+        <div class="highlight">
+          ⏱ Recupero tra esercizi: 1 minuto e 30 secondi
+        </div>
+      </div>
+
+      <!-- Progressione -->
+      <div class="section">
+        <h2 class="section-title">📊 Progressione Settimanale</h2>
+        <div class="progression-table">
+          <div class="table-header">
+            <span>Settimana</span>
+            <span>Serie</span>
+            <span>Ripetizioni</span>
+            <span>Note</span>
+          </div>
+          <div class="table-row">
+            <span><strong>1-2</strong></span>
+            <span>2</span>
+            <span>10</span>
+            <span>Focus sulla tecnica corretta</span>
+          </div>
+          <div class="table-row">
+            <span><strong>3</strong></span>
+            <span>2</span>
+            <span>15</span>
+            <span>Aumenta le ripetizioni</span>
+          </div>
+          <div class="table-row">
+            <span><strong>4+</strong></span>
+            <span>3</span>
+            <span>15</span>
+            <span>Aggiunge una serie extra</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Esercizi Dettagliati -->
+      <div class="section">
+        <h2 class="section-title">🎥 Esercizi con Video Tutorial</h2>
+
+        <div class="exercise-detail">
+          <div class="exercise-header">
+            <div class="exercise-icon">1</div>
+            <div class="exercise-title">
+              PIEGAMENTI SULLE BRACCIA (Push-ups)
+            </div>
+          </div>
+
+          <div class="video-section">
+            <div class="video-title">📺 Video di riferimento:</div>
+            <a
+              href="https://www.youtube.com/watch?v=BMKmk2u1aqU"
+              target="_blank"
+            >
+              <img
+                src="https://img.youtube.com/vi/BMKmk2u1aqU/hqdefault.jpg"
+                alt="Push-up Tutorial italiano"
+                style="width: 100%; max-width: 480px; border-radius: 8px"
+              />
+            </a>
+          </div>
+
+          <div class="execution-section">
+            <div class="execution-title">✅ Esecuzione corretta:</div>
+            <ul class="execution-steps">
+              <li>
+                Posizione di partenza: Sdraiati a pancia in giù, mani appoggiate
+                al suolo all'altezza delle spalle
+              </li>
+              <li>
+                Per principianti: Appoggia le ginocchia a terra invece dei piedi
+              </li>
+              <li>
+                Movimento: Spingi con le braccia per sollevare il corpo,
+                mantenendo schiena dritta
+              </li>
+              <li>
+                Respirazione: Inspira scendendo, espira spingendo verso l'alto
+              </li>
+              <li>Ripetizioni: 2×10 → 2×15 → 3×15</li>
+            </ul>
+          </div>
+
+          <div class="muscles">
+            💪 Pettorali • Tricipiti • Deltoidi anteriori • Core
+          </div>
+        </div>
+
+        <div class="exercise-detail">
+          <div class="exercise-header">
+            <div class="exercise-icon">2</div>
+            <div class="exercise-title">SQUAT</div>
+          </div>
+
+          <div class="video-section">
+            <div class="video-title">📺 Video di riferimento:</div>
+            <a
+              href="https://www.youtube.com/watch?v=dMMwEeCYS2A"
+              target="_blank"
+            >
+              <img
+                src="https://img.youtube.com/vi/dMMwEeCYS2A/hqdefault.jpg"
+                alt="Squat Tutorial italiano"
+                style="width: 100%; max-width: 480px; border-radius: 8px"
+              />
+            </a>
+          </div>
+
+          <div class="execution-section">
+            <div class="execution-title">✅ Esecuzione corretta:</div>
+            <ul class="execution-steps">
+              <li>
+                Posizione di partenza: Piedi alla larghezza delle spalle, punte
+                leggermente verso l'esterno
+              </li>
+              <li>
+                Movimento: Piega le ginocchia come se ti stessi sedendo su una
+                sedia
+              </li>
+              <li>
+                Profondità: Scendi fino a quando le cosce sono parallele al
+                pavimento
+              </li>
+              <li>Risalita: Spingi sui talloni per tornare in piedi</li>
+              <li>Postura: Mantieni il petto alto e la schiena dritta</li>
+            </ul>
+          </div>
+
+          <div class="muscles">
+            💪 Quadricipiti • Glutei • Femorali • Polpacci
+          </div>
+        </div>
+
+        <div class="exercise-detail">
+          <div class="exercise-header">
+            <div class="exercise-icon">3</div>
+            <div class="exercise-title">REMATORE (Rowing)</div>
+          </div>
+
+          <div class="video-section">
+            <div class="video-title">📺 Video di riferimento:</div>
+            <a
+              href="https://www.youtube.com/watch?v=-ebafKeAmXs"
+              target="_blank"
+            >
+              <img
+                src="https://img.youtube.com/vi/-ebafKeAmXs/hqdefault.jpg"
+                alt="Squat Rematore italiano"
+                style="width: 100%; max-width: 480px; border-radius: 8px"
+              />
+            </a>
+          </div>
+
+          <div class="execution-section">
+            <div class="execution-title">✅ Esecuzione corretta:</div>
+            <ul class="execution-steps">
+              <li>
+                Posizione: Piedi alla larghezza delle spalle, ginocchia
+                leggermente piegate
+              </li>
+              <li>
+                Inclinazione: Inclina il busto in avanti mantenendo la schiena
+                dritta
+              </li>
+              <li>Movimento: Porta i gomiti indietro, stringendo le scapole</li>
+              <li>
+                Controllo: Movimento lento e controllato sia in salita che in
+                discesa
+              </li>
+              <li>
+                Equipaggiamento: Usa bottiglie d'acqua, manubri o bande
+                elastiche
+              </li>
+            </ul>
+          </div>
+
+          <div class="muscles">
+            💪 Latissimi dorsi • Romboidi • Trapezi • Bicipiti
+          </div>
+        </div>
+
+        <div class="exercise-detail">
+          <div class="exercise-header">
+            <div class="exercise-icon">4</div>
+            <div class="exercise-title">AFFONDI (Lunges)</div>
+          </div>
+
+          <div class="video-section">
+            <div class="video-title">📺 Video di riferimento:</div>
+            <a
+              href="https://www.youtube.com/watch?v=TVZd49-3KEw"
+              target="_blank"
+            >
+              <img
+                src="https://img.youtube.com/vi/TVZd49-3KEw/hqdefault.jpg"
+                alt="Lunges tutorial Veronica Tudor"
+                style="width: 100%; max-width: 480px; border-radius: 8px"
+              />
+            </a>
+          </div>
+
+          <div class="execution-section">
+            <div class="execution-title">✅ Esecuzione corretta:</div>
+            <ul class="execution-steps">
+              <li>
+                Posizione di partenza: In piedi, piedi alla larghezza delle
+                anche
+              </li>
+              <li>Passo: Fai un grande passo avanti con una gamba</li>
+              <li>Discesa: Piega entrambe le ginocchia a 90°</li>
+              <li>Controllo: Il ginocchio posteriore non deve toccare terra</li>
+              <li>
+                Ritorno: Spingi sul tallone della gamba anteriore per tornare in
+                posizione
+              </li>
+              <li>
+                Alternanza: Alterna le gambe o completa tutte le ripetizioni per
+                lato
+              </li>
+            </ul>
+          </div>
+
+          <div class="muscles">
+            💪 Quadricipiti • Glutei • Femorali • Polpacci
+          </div>
+        </div>
+
+        <div class="exercise-detail">
+          <div class="exercise-header">
+            <div class="exercise-icon">5</div>
+            <div class="exercise-title">ALZATE LATERALI</div>
+          </div>
+
+          <div class="video-section">
+            <div class="video-title">📺 Video di riferimento:</div>
+            <a
+              href="https://www.youtube.com/watch?v=6zfnhwEfDno"
+              target="_blank"
+            >
+              <img
+                src="https://img.youtube.com/vi/6zfnhwEfDno/hqdefault.jpg"
+                alt="Alzate laterali con manubri"
+                style="width: 100%; max-width: 480px; border-radius: 8px"
+              />
+            </a>
+          </div>
+
+          <div class="execution-section">
+            <div class="execution-title">✅ Esecuzione corretta:</div>
+            <ul class="execution-steps">
+              <li>Posizione: In piedi, piedi alla larghezza delle spalle</li>
+              <li>Presa: Tieni un peso in ogni mano (bottiglie, manubri)</li>
+              <li>
+                Movimento: Solleva le braccia lateralmente fino all'altezza
+                delle spalle
+              </li>
+              <li>
+                Controllo: Bloccare le scapole, col gomito semiflesso (appena
+                piegato)
+              </li>
+              <li>
+                Attenzione: Il gomito non deve mai cambiare angolazione durante
+                il movimento
+              </li>
+              <li>
+                Limite: Fermarsi quando il gomito è all'altezza della spalla
+              </li>
+            </ul>
+          </div>
+
+          <div class="muscles">💪 Deltoidi (spalle) • Trapezi</div>
+        </div>
+
+        <div class="exercise-detail">
+          <div class="exercise-header">
+            <div class="exercise-icon">6</div>
+            <div class="exercise-title">TRICIPITI (Dietro/Addotti)</div>
+          </div>
+
+          <div class="video-section">
+            <div class="video-title">📺 Video di riferimento:</div>
+            <a
+              href="https://www.youtube.com/watch?v=izfXtOG0UEk"
+              target="_blank"
+            >
+              <img
+                src="https://img.youtube.com/vi/izfXtOG0UEk/hqdefault.jpg"
+                alt="Tricipiti con manubri"
+                style="width: 100%; max-width: 480px; border-radius: 8px"
+              />
+            </a>
+          </div>
+
+          <div class="execution-section">
+            <div class="execution-title">✅ Esecuzione corretta:</div>
+            <ul class="execution-steps">
+              <li>Posizione: Seduto o in piedi, schiena dritta</li>
+              <li>
+                Movimento: Porta il peso sopra la testa, poi piega i gomiti
+                portando il peso dietro la nuca
+              </li>
+              <li>
+                Controllo: Solo gli avambracci si muovono, i gomiti restano
+                fermi
+              </li>
+              <li>Variante: Puoi eseguirlo anche sdraiato (french press)</li>
+            </ul>
+          </div>
+
+          <div class="muscles">💪 Tricipiti</div>
+        </div>
+
+        <div class="exercise-detail">
+          <div class="exercise-header">
+            <div class="exercise-icon">7</div>
+            <div class="exercise-title">CURL (Flessioni Bicipiti)</div>
+          </div>
+
+          <div class="video-section">
+            <div class="video-title">📺 Video di riferimento:</div>
+            <a
+              href="https://www.youtube.com/watch?v=t-I2B4Xq0p0"
+              target="_blank"
+            >
+              <img
+                src="https://img.youtube.com/vi/t-I2B4Xq0p0/hqdefault.jpg"
+                alt="Curl Bicipiti con manubri"
+                style="width: 100%; max-width: 480px; border-radius: 8px"
+              />
+            </a>
+          </div>
+
+          <div class="execution-section">
+            <div class="execution-title">✅ Esecuzione corretta:</div>
+            <ul class="execution-steps">
+              <li>Posizione: In piedi, braccia lungo i fianchi</li>
+              <li>Presa: Tieni i pesi con i palmi rivolti in avanti</li>
+              <li>Movimento: Piega i gomiti portando i pesi verso le spalle</li>
+              <li>Controllo: I gomiti restano fermi ai fianchi</li>
+              <li>Discesa: Scendi lentamente alla posizione iniziale</li>
+            </ul>
+          </div>
+
+          <div class="muscles">💪 Bicipiti • Brachiali</div>
+        </div>
+      </div>
+
+      <!-- Sicurezza -->
+      <div class="safety-section">
+        <h3 class="safety-title">⚠️ Note Importanti sulla Sicurezza</h3>
+        <div class="safety-grid">
+          <div class="safety-item">
+            <h4>🔥 Prima di Iniziare:</h4>
+            <ul>
+              <li>Riscaldamento: 5-10 minuti di marcia sul posto</li>
+              <li>Idratazione: Bevi acqua prima, durante e dopo</li>
+              <li>Respirazione: Non trattenere mai il respiro</li>
+            </ul>
+          </div>
+          <div class="safety-item">
+            <h4>💯 Durante l'Esercizio:</h4>
+            <ul>
+              <li>Forma prima di tutto: Tecnica corretta sempre</li>
+              <li>Dolore vs. Fatica: Fermati se senti dolore acuto</li>
+              <li>Progressione graduale: Aumenta intensità gradualmente</li>
+            </ul>
+          </div>
+          <div class="safety-item">
+            <h4>🧘‍♀️ Dopo l'Allenamento:</h4>
+            <ul>
+              <li>Stretching: 5-10 minuti di allungamento</li>
+              <li>Recupero: Rispetta i giorni di riposo</li>
+              <li>Monitoraggio: Tieni traccia dei progressi</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Piano di Progressione -->
+      <div class="progression-plan">
+        <h3 class="progression-title">
+          🏆 Piano di Progressione a Lungo Termine
+        </h3>
+
+        <div class="progression-item">
+          <h4>Mesi 1-2: Fondamenta</h4>
+          <ul>
+            <li>Focus sulla tecnica corretta</li>
+            <li>Costruzione della resistenza base</li>
+            <li>Abitudine all'allenamento regolare</li>
+          </ul>
+        </div>
+
+        <div class="progression-item">
+          <h4>Mesi 3-4: Sviluppo</h4>
+          <ul>
+            <li>Aumento delle ripetizioni</li>
+            <li>Introduzione di varianti più impegnative</li>
+            <li>Miglioramento della forza</li>
+          </ul>
+        </div>
+
+        <div class="progression-item">
+          <h4>Mesi 5+: Perfezionamento</h4>
+          <ul>
+            <li>Combinazioni di esercizi più complesse</li>
+            <li>Tempi di recupero ridotti</li>
+            <li>Introduzione di nuove sfide</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Camminate Veloce -->
+      <div class="progression-plan">
+        <h3 class="progression-title">
+          🚶‍♀️ Attività Complementare: Camminata Veloce
+        </h3>
+
+        <div class="progression-item">
+          <h4>Programma Settimanale</h4>
+          <ul>
+            <li>3 giorni a settimana nei giorni di riposo dall'allenamento</li>
+            <li>Durata: 50 minuti per sessione</li>
+            <li>Velocità: 5-6 km/h (passo sostenuto)</li>
+            <li>Orario consigliato: mattina o tardo pomeriggio</li>
+          </ul>
+        </div>
+
+        <div class="progression-item">
+          <h4>Benefici</h4>
+          <ul>
+            <li>Migliora la circolazione e la salute cardiovascolare</li>
+            <li>Aiuta il recupero muscolare</li>
+            <li>Mantiene attivo il metabolismo</li>
+            <li>Supporta la perdita di peso</li>
+          </ul>
+        </div>
+
+        <div class="progression-item">
+          <h4>Consigli</h4>
+          <ul>
+            <li>Indossa scarpe comode e adatte alla camminata</li>
+            <li>Mantieni una postura corretta durante la camminata</li>
+            <li>Idratati prima, durante e dopo l'attività</li>
+            <li>Usa un'app o un contapassi per monitorare la velocità</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="highlight">
+        🏆 Ricorda: la costanza è la chiave del successo! Programma di
+        allenamento per circuito casalingo.
+      </div>
+    </div>
+  </body>
+</html>
