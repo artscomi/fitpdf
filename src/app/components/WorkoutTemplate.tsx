@@ -33,7 +33,7 @@ export default function WorkoutTemplate({
   return (
     <div className="container mx-auto max-w-[210mm] p-5 bg-white">
       <div className="header bg-[#7159b5] text-white p-8 rounded-[15px] text-center mb-8">
-        <h1 className="text-[2.5rem] font-bold mb-2">
+        <h1 className="text-[1.5rem] font-bold mb-2">
           🏋️‍♀️ Programma di Allenamento Personalizzato
         </h1>
         <p className="text-[1.1rem] opacity-90 font-light">
