@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import TextInput from "./TextInput";
 import TextArea from "./TextArea";
 import WorkoutTemplate from "./WorkoutTemplate";
+import { generatePDF } from "../utils/pdfGenerator";
 
 interface Exercise {
   name: string;
@@ -24,6 +25,8 @@ interface FormData {
 }
 
 export default function TrainerForm() {
+  const previewRef = useRef<HTMLDivElement>(null);
+  const [isGenerating, setIsGenerating] = useState(false);
   const [formData, setFormData] = useState<FormData>({
     clientName: "",
     clientAge: "",
@@ -63,10 +66,42 @@ export default function TrainerForm() {
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Qui implementeremo la logica per generare il PDF
-    console.log("Form submitted:", formData);
+
+    if (!previewRef.current) {
+      console.error("Preview element not found");
+      return;
+    }
+
+    if (!formData.clientName) {
+      alert("Per favore, inserisci il nome del cliente");
+      return;
+    }
+
+    setIsGenerating(true);
+    try {
+      console.log("Starting PDF generation process...");
+      const filename = `workout-program-${formData.clientName
+        .toLowerCase()
+        .replace(/\s+/g, "-")}`;
+
+      // Aspetta un momento per assicurarsi che il DOM sia completamente renderizzato
+      await new Promise((resolve) => setTimeout(resolve, 100));
+
+      const success = await generatePDF(previewRef.current, filename);
+
+      if (!success) {
+        throw new Error("PDF generation failed");
+      }
+    } catch (error) {
+      console.error("Error in handleSubmit:", error);
+      alert(
+        "Si è verificato un errore durante la generazione del PDF. Riprova più tardi."
+      );
+    } finally {
+      setIsGenerating(false);
+    }
   };
 
   return (
@@ -193,9 +228,14 @@ export default function TrainerForm() {
             <div className="flex justify-end">
               <button
                 type="submit"
-                className="bg-[#7159b5] text-white px-6 py-2 rounded-lg hover:bg-[#5a4a8f] transition-colors"
+                disabled={isGenerating}
+                className={`bg-[#7159b5] text-white px-6 py-2 rounded-lg transition-colors ${
+                  isGenerating
+                    ? "opacity-50 cursor-not-allowed"
+                    : "hover:bg-[#5a4a8f]"
+                }`}
               >
-                Genera PDF
+                {isGenerating ? "Generazione PDF..." : "Genera PDF"}
               </button>
             </div>
           </form>
@@ -205,7 +245,11 @@ export default function TrainerForm() {
         <div className="lg:sticky lg:top-4 lg:h-[calc(100vh-2rem)]">
           <div className="bg-white p-4 rounded-lg shadow-md h-full">
             <h2 className="text-2xl font-bold mb-4">Anteprima</h2>
-            <div className="overflow-y-auto h-[calc(100%-4rem)]">
+            <div
+              className="overflow-y-auto h-[calc(100%-4rem)]"
+              ref={previewRef}
+              id="pdf-preview"
+            >
               <WorkoutTemplate
                 clientInfo={{
                   name: formData.clientName,
