@@ -7,11 +7,17 @@ export async function POST(request: Request) {
 
     let browser;
     if (process.env.NODE_ENV === "production") {
-      const puppeteerCore = await import("puppeteer-core");
-      browser = await puppeteerCore.default.launch({
-        args: ["--no-sandbox", "--disable-setuid-sandbox"],
-        executablePath: "/usr/bin/google-chrome",
+      const chromium = await import("chrome-aws-lambda");
+      browser = await chromium.default.puppeteer.launch({
+        args: [
+          ...chromium.default.args,
+          "--hide-scrollbars",
+          "--disable-web-security",
+        ],
+        defaultViewport: chromium.default.defaultViewport,
+        executablePath: await chromium.default.executablePath,
         headless: true,
+        ignoreHTTPSErrors: true,
       });
     } else {
       browser = await puppeteer.launch({
