@@ -36,7 +36,8 @@
         --text-lg: 1.2rem;
         --text-xl: 1.3rem;
         --text-2xl: 1.5rem;
-        --text-3xl: 2.5rem;
+        --text-3xl: 2rem;
+        --text-4xl: 2.5rem;
       }
 
       * {
@@ -71,7 +72,7 @@
       }
 
       .header h1 {
-        font-size: var(--text-3xl);
+        font-size: var(--text-4xl);
         font-weight: 700;
         margin-bottom: var(--spacing-xs);
       }
@@ -462,44 +463,51 @@
 
         .container {
           max-width: none;
-          padding: var(--spacing-md);
+          padding: var(--spacing-xs);
         }
 
-        .section {
-          page-break-inside: avoid;
+        /* Prevenzione della divisione delle sezioni */
+        .section,
+        .exercise-detail,
+        .safety-section,
+        .progression-plan,
+        .progression-item,
+        .video-section,
+        .execution-section {
+          page-break-inside: avoid !important;
+          break-inside: avoid !important;
         }
 
-        .exercise-detail {
-          page-break-inside: avoid;
-        }
-
-        /* Prevenzione righe orfane per liste e paragrafi */
-        p,
-        li,
-        .execution-steps li,
-        .safety-item li,
-        .progression-item li {
-          orphans: 3;
-          widows: 3;
-        }
-
-        /* Prevenzione righe orfane per titoli */
+        /* Prevenzione della divisione dei titoli */
         h1,
         h2,
         h3,
         h4,
         .section-title,
-        .exercise-title {
-          page-break-after: avoid;
-          orphans: 3;
-          widows: 3;
+        .exercise-title,
+        .safety-title,
+        .progression-title {
+          page-break-after: avoid !important;
+          break-after: avoid !important;
         }
 
-        /* Prevenzione righe orfane per sezioni importanti */
-        .exercise-detail,
-        .safety-section,
-        .progression-plan {
-          page-break-inside: avoid;
+        .header h1 {
+          font-size: var(--text-3xl);
+        }
+
+        h2 {
+          font-size: 1.2em;
+        }
+
+        /* Prevenzione della divisione delle liste */
+        ul,
+        ol {
+          page-break-inside: avoid !important;
+          break-inside: avoid !important;
+        }
+
+        /* Prevenzione della divisione dei paragrafi */
+        p {
           orphans: 3;
           widows: 3;
         }
@@ -537,40 +545,10 @@
           background-color: var(--color-bg-white) !important;
         }
 
-        /* Mantiene le ultime due sezioni insieme */
-        .safety-section {
-          page-break-inside: avoid;
-          page-break-after: avoid;
-        }
-
-        .progression-plan {
-          page-break-inside: avoid;
-          page-break-before: avoid;
-          page-break-after: avoid;
-        }
-
-        /* Wrapper per le ultime due sezioni */
-        .safety-section + .progression-plan {
-          page-break-before: avoid;
-        }
-
-        /* Forza la sezione progressione su una nuova pagina se necessario */
-        .progression-plan {
-          break-inside: avoid;
-          break-before: auto;
-          break-after: avoid;
-        }
-
-        /* Regole più stringenti per la sezione progressione */
-        .progression-plan {
-          page-break-inside: avoid !important;
-          break-inside: avoid !important;
-          display: block !important;
-        }
-
-        .progression-item {
-          page-break-inside: avoid !important;
-          break-inside: avoid !important;
+        /* Regole per la stampa multipla */
+        @page {
+          size: A4;
+          margin: 1cm;
         }
 
         /* Stile per i link nella stampa */
@@ -598,12 +576,6 @@
         .video-link {
           border: 1px solid var(--color-primary);
           margin-top: var(--spacing-sm);
-        }
-
-        /* Regole specifiche per la stampa multipla */
-        @page {
-          size: A4;
-          margin: 1cm;
         }
 
         /* Forza la visualizzazione corretta delle thumbnail in stampa multipla */
