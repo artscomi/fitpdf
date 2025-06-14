@@ -193,7 +193,7 @@ export default function TrainerForm() {
         <button
           type="button"
           onClick={() => setShowPreview(!showPreview)}
-          className="w-full bg-[#7159b5] text-white px-6 py-4 text-base hover:bg-[#5a4a8f] transition-colors flex items-center justify-center gap-2 shadow-xl"
+          className="w-full bg-primary text-white px-6 py-4 text-base hover:bg-primary-dark transition-colors flex items-center justify-center gap-2 shadow-xl"
         >
           {showPreview ? (
             <>
@@ -253,7 +253,7 @@ export default function TrainerForm() {
             onSubmit={handleSubmit}
             className="space-y-4 lg:space-y-6 pb-8 lg:pb-0"
           >
-            <div className="bg-white p-4 sm:p-6 rounded-lg shadow-md">
+            <div className="bg-white dark:bg-input-bg p-4 sm:p-6 rounded-lg shadow-md">
               <h2 className="text-xl sm:text-2xl font-bold mb-3 sm:mb-4">
                 Informazioni Cliente
               </h2>
@@ -315,7 +315,7 @@ export default function TrainerForm() {
               </div>
             </div>
 
-            <div className="bg-white p-4 sm:p-6 rounded-lg shadow-md">
+            <div className="bg-white dark:bg-input-bg p-4 sm:p-6 rounded-lg shadow-md">
               <h2 className="text-xl sm:text-2xl font-bold mb-4">Esercizi</h2>
               <div className="space-y-4 lg:space-y-6">
                 {formData.exercises.map((exercise, index) => (
@@ -330,7 +330,7 @@ export default function TrainerForm() {
                       <button
                         type="button"
                         onClick={() => removeExercise(index)}
-                        className="text-red-500 hover:text-red-700 transition-colors p-1 cursor-pointer"
+                        className="text-error hover:text-error-light transition-colors p-1 cursor-pointer"
                         title="Rimuovi esercizio"
                       >
                         <svg
@@ -429,7 +429,7 @@ export default function TrainerForm() {
                   <button
                     type="button"
                     onClick={addExercise}
-                    className="bg-[#7159b5] text-white px-4 py-2 rounded-lg text-sm hover:bg-[#5a4a8f] transition-colors border-2 border-dashed border-[#7159b5] hover:border-[#5a4a8f] cursor-pointer"
+                    className="bg-primary text-white px-4 py-2 rounded-lg text-sm hover:bg-primary-dark transition-colors border-2 border-dashed border-primary hover:border-primary-dark cursor-pointer"
                   >
                     + Aggiungi Esercizio
                   </button>
@@ -440,10 +440,10 @@ export default function TrainerForm() {
             <button
               type="submit"
               disabled={isGenerating}
-              className={`w-full bg-[#7159b5] text-white px-4 my-3 sm:px-6 py-3 rounded-lg transition-colors cursor-pointer text-sm sm:text-base ${
+              className={`w-full bg-primary text-white px-4 my-3 sm:px-6 py-3 rounded-lg transition-colors cursor-pointer text-sm sm:text-base ${
                 isGenerating
                   ? "opacity-50 cursor-not-allowed"
-                  : "hover:bg-[#5a4a8f]"
+                  : "hover:bg-primary-dark"
               }`}
             >
               {isGenerating ? "Generazione PDF..." : "Genera PDF"}
@@ -459,7 +459,7 @@ export default function TrainerForm() {
               : "opacity-0 translate-x-full absolute lg:relative"
           }`}
         >
-          <div className="bg-white p-2 sm:p-3 rounded-lg shadow-md">
+          <div className="bg-white dark:bg-input-bg p-2 sm:p-3 rounded-lg shadow-md">
             <div className="flex justify-between items-center mb-2 sm:mb-3"></div>
             <div className="overflow-y-auto" ref={previewRef} id="pdf-preview">
               <WorkoutTemplate

@@ -6,6 +6,8 @@ interface TextAreaProps {
   required?: boolean;
   className?: string;
   error?: string;
+  placeholder?: string;
+  rows?: number;
 }
 
 export default function TextArea({
@@ -16,25 +18,28 @@ export default function TextArea({
   required = false,
   className = "",
   error,
+  placeholder,
+  rows = 4,
 }: TextAreaProps) {
   return (
     <div className="flex flex-col">
-      <label htmlFor={name} className="text-sm font-medium text-gray-700 mb-1">
+      <label htmlFor={name} className="text-sm font-medium text-secondary mb-1">
         {label}
-        {required && <span className="text-red-500 ml-1">*</span>}
+        {required && <span className="text-error ml-1">*</span>}
       </label>
       <textarea
         id={name}
         name={name}
         value={value}
         onChange={onChange}
+        className={`w-full px-3 py-2 border border-input rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent ${
+          error ? "border-error" : ""
+        } ${className || ""}`}
+        placeholder={placeholder}
         required={required}
-        rows={4}
-        className={`px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-[#7159b5] ${
-          error ? "border-red-500" : "border-gray-300"
-        } ${className}`}
+        rows={rows}
       />
-      {error && <p className="mt-1 text-sm text-red-500">{error}</p>}
+      {error && <p className="mt-1 text-sm text-error">{error}</p>}
     </div>
   );
 }
