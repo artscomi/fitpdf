@@ -9,8 +9,8 @@ export async function generatePDF(html: string): Promise<Buffer> {
   try {
     if (process.env.NODE_ENV === "production") {
       browser = await puppeteerCore.launch({
-        args: [...chromium.args, "--no-sandbox"],
-        executablePath: await chromium.executablePath(),
+        args: chromium.args,
+        executablePath: process.env.CHROME_AWS_LAMBDA_CHROME_EXECUTABLE_PATH,
         headless: chromium.headless,
         ignoreHTTPSErrors: true,
       });
