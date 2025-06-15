@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import "./WorkoutTemplate.css";
 import { Exercise } from "./TrainerForm";
 import Image from "next/image";
@@ -19,6 +19,27 @@ const WorkoutTemplate: React.FC<WorkoutTemplateProps> = ({
   exercises,
   clientInfo,
 }) => {
+  const [thumbnailBase64, setThumbnailBase64] = useState<{
+    [key: string]: string;
+  }>({});
+
+  useEffect(() => {
+    const loadThumbnails = async () => {
+      const newThumbnails: { [key: string]: string } = {};
+      for (const exercise of exercises) {
+        if (exercise.videoUrl) {
+          const base64 = await convertImageToBase64(
+            getThumbnailUrl(exercise.videoUrl)
+          );
+          newThumbnails[exercise.videoUrl] = base64;
+        }
+      }
+      setThumbnailBase64(newThumbnails);
+    };
+
+    loadThumbnails();
+  }, [exercises]);
+
   return (
     <div>
       <div className="header">
@@ -50,19 +71,23 @@ const WorkoutTemplate: React.FC<WorkoutTemplateProps> = ({
                 <strong>Altezza:</strong> {clientInfo.height} cm
               </div>
             )}
-            {clientInfo.goals && (
-              <div className="mt-2">
-                <strong>Obiettivi:</strong>
-                <p>{clientInfo.goals}</p>
-              </div>
-            )}
-            {clientInfo.medicalConditions && (
-              <div className="mt-2">
-                <strong>Condizioni Mediche:</strong>
-                <p>{clientInfo.medicalConditions}</p>
-              </div>
-            )}
           </div>
+          {(clientInfo?.goals || clientInfo?.medicalConditions) && (
+            <div className="full-width-info">
+              {clientInfo.goals && (
+                <div>
+                  <strong>Obiettivi:</strong>
+                  <p>{clientInfo.goals}</p>
+                </div>
+              )}
+              {clientInfo.medicalConditions && (
+                <div>
+                  <strong>Condizioni Mediche:</strong>
+                  <p>{clientInfo.medicalConditions}</p>
+                </div>
+              )}
+            </div>
+          )}
         </div>
       )}
 
@@ -130,12 +155,13 @@ const WorkoutTemplate: React.FC<WorkoutTemplateProps> = ({
               <div className="exercise-icon">{index + 1}</div>
               <div className="exercise-title">{exercise.name}</div>
             </div>
-
-            <div className="exercise-details">
-              {exercise.sets && <span>Serie: {exercise.sets}</span>}
-              {exercise.reps && <span>Ripetizioni: {exercise.reps}</span>}
-              {exercise.rest && <span>Recupero: {exercise.rest}</span>}
-            </div>
+            {(exercise.sets || exercise.reps || exercise.rest) && (
+              <div className="exercise-details">
+                {exercise.sets && <span>Serie: {exercise.sets}</span>}
+                {exercise.reps && <span>Ripetizioni: {exercise.reps}</span>}
+                {exercise.rest && <span>Recupero: {exercise.rest}</span>}
+              </div>
+            )}
 
             {exercise.videoUrl && (
               <div className="video-section">
@@ -147,7 +173,10 @@ const WorkoutTemplate: React.FC<WorkoutTemplateProps> = ({
                   className="video-thumbnail-container"
                 >
                   <Image
-                    src={getThumbnailUrl(exercise.videoUrl)}
+                    src={
+                      thumbnailBase64[exercise.videoUrl] ||
+                      "/images/video-placeholder.jpg"
+                    }
                     alt={exercise.name}
                     width={480}
                     height={360}
@@ -158,7 +187,6 @@ const WorkoutTemplate: React.FC<WorkoutTemplateProps> = ({
                       height: "auto",
                     }}
                     onError={(e) => {
-                      // Se l'immagine di YouTube fallisce, usa l'immagine di fallback
                       const target = e.target as HTMLImageElement;
                       target.src = "/images/video-placeholder.jpg";
                     }}
@@ -254,8 +282,24 @@ const WorkoutTemplate: React.FC<WorkoutTemplateProps> = ({
 // Helper function to get YouTube thumbnail URL
 const getThumbnailUrl = (videoUrl: string): string => {
   const videoId = videoUrl.split("v=")[1]?.split("&")[0];
-  if (!videoId) return "/images/video-placeholder.svg";
-  return `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`;
+  if (!videoId) return "/images/video-placeholder.jpg";
+  return `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
+};
+
+const convertImageToBase64 = async (imageUrl: string): Promise<string> => {
+  try {
+    const response = await fetch(imageUrl);
+    const blob = await response.blob();
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onloadend = () => resolve(reader.result as string);
+      reader.onerror = reject;
+      reader.readAsDataURL(blob);
+    });
+  } catch (error) {
+    console.error("Error converting image to base64:", error);
+    return "/images/video-placeholder.jpg";
+  }
 };
 
 // Safety items data

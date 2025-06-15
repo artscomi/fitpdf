@@ -8,12 +8,12 @@ import { generatePDF } from "../utils/pdfGenerator";
 
 export interface Exercise {
   name: string;
-  sets: number;
-  reps: string;
-  rest: string;
-  notes: string;
+  sets?: number;
+  reps?: string;
+  rest?: string;
+  notes?: string;
   videoUrl?: string;
-  muscleGroup: string;
+  muscleGroup?: string;
 }
 
 interface FormData {
@@ -39,6 +39,8 @@ export default function TrainerForm() {
   const previewRef = useRef<HTMLDivElement>(null);
   const [isGenerating, setIsGenerating] = useState(false);
   const [showPreview, setShowPreview] = useState(false);
+  const [showGoals, setShowGoals] = useState(false);
+  const [showMedicalConditions, setShowMedicalConditions] = useState(false);
   const [errors, setErrors] = useState<FormErrors>({});
   const [formData, setFormData] = useState<FormData>({
     clientName: "",
@@ -69,6 +71,62 @@ export default function TrainerForm() {
       ...prev,
       [name]: value,
     }));
+
+    // Validazione immediata per i campi numerici
+    const newErrors = { ...errors };
+
+    if (name === "clientAge") {
+      if (!value.trim()) {
+        newErrors.clientAge = "L'età è obbligatoria";
+      } else {
+        const age = parseInt(value);
+        if (isNaN(age)) {
+          newErrors.clientAge = "L'età deve essere un numero";
+        } else if (age < 16) {
+          newErrors.clientAge = "L'età minima è 16 anni";
+        } else if (age > 100) {
+          newErrors.clientAge = "L'età massima è 100 anni";
+        } else {
+          delete newErrors.clientAge;
+        }
+      }
+    }
+
+    if (name === "clientWeight") {
+      if (!value.trim()) {
+        newErrors.clientWeight = "Il peso è obbligatorio";
+      } else {
+        const weight = parseInt(value);
+        if (isNaN(weight)) {
+          newErrors.clientWeight = "Il peso deve essere un numero";
+        } else if (weight < 30) {
+          newErrors.clientWeight = "Il peso minimo è 30 kg";
+        } else if (weight > 300) {
+          newErrors.clientWeight = "Il peso massimo è 300 kg";
+        } else {
+          delete newErrors.clientWeight;
+        }
+      }
+    }
+
+    if (name === "clientHeight") {
+      if (!value.trim()) {
+        newErrors.clientHeight = "L'altezza è obbligatoria";
+      } else {
+        const height = parseInt(value);
+        if (isNaN(height)) {
+          newErrors.clientHeight = "L'altezza deve essere un numero";
+        } else if (height < 100) {
+          newErrors.clientHeight = "L'altezza minima è 100 cm";
+        } else if (height > 250) {
+          newErrors.clientHeight = "L'altezza massima è 250 cm";
+        } else {
+          delete newErrors.clientHeight;
+        }
+      }
+    }
+
+    setErrors(newErrors);
   };
 
   const handleExerciseChange = (
@@ -113,6 +171,26 @@ export default function TrainerForm() {
     }));
   };
 
+  const handleGoalsToggle = (checked: boolean) => {
+    setShowGoals(checked);
+    if (!checked) {
+      setFormData((prev) => ({
+        ...prev,
+        clientGoals: "",
+      }));
+    }
+  };
+
+  const handleMedicalConditionsToggle = (checked: boolean) => {
+    setShowMedicalConditions(checked);
+    if (!checked) {
+      setFormData((prev) => ({
+        ...prev,
+        medicalConditions: "",
+      }));
+    }
+  };
+
   const validateForm = (): boolean => {
     const newErrors: FormErrors = {};
     let isValid = true;
@@ -125,14 +203,50 @@ export default function TrainerForm() {
     if (!formData.clientAge.trim()) {
       newErrors.clientAge = "L'età è obbligatoria";
       isValid = false;
+    } else {
+      const age = parseInt(formData.clientAge);
+      if (isNaN(age)) {
+        newErrors.clientAge = "L'età deve essere un numero";
+        isValid = false;
+      } else if (age < 16) {
+        newErrors.clientAge = "L'età minima è 16 anni";
+        isValid = false;
+      } else if (age > 100) {
+        newErrors.clientAge = "L'età massima è 100 anni";
+        isValid = false;
+      }
     }
     if (!formData.clientWeight.trim()) {
       newErrors.clientWeight = "Il peso è obbligatorio";
       isValid = false;
+    } else {
+      const weight = parseInt(formData.clientWeight);
+      if (isNaN(weight)) {
+        newErrors.clientWeight = "Il peso deve essere un numero";
+        isValid = false;
+      } else if (weight < 30) {
+        newErrors.clientWeight = "Il peso minimo è 30 kg";
+        isValid = false;
+      } else if (weight > 300) {
+        newErrors.clientWeight = "Il peso massimo è 300 kg";
+        isValid = false;
+      }
     }
     if (!formData.clientHeight.trim()) {
       newErrors.clientHeight = "L'altezza è obbligatoria";
       isValid = false;
+    } else {
+      const height = parseInt(formData.clientHeight);
+      if (isNaN(height)) {
+        newErrors.clientHeight = "L'altezza deve essere un numero";
+        isValid = false;
+      } else if (height < 100) {
+        newErrors.clientHeight = "L'altezza minima è 100 cm";
+        isValid = false;
+      } else if (height > 250) {
+        newErrors.clientHeight = "L'altezza massima è 250 cm";
+        isValid = false;
+      }
     }
 
     // Validazione esercizi
@@ -157,6 +271,7 @@ export default function TrainerForm() {
     e.preventDefault();
 
     if (!validateForm()) {
+      window.scrollTo({ top: 0, behavior: "smooth" });
       return;
     }
 
@@ -268,6 +383,7 @@ export default function TrainerForm() {
                   onChange={handleInputChange}
                   required
                   error={errors.clientName}
+                  data-error={!!errors.clientName}
                 />
                 <TextInput
                   label="Età"
@@ -278,6 +394,7 @@ export default function TrainerForm() {
                   required
                   error={errors.clientAge}
                   className="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                  data-error={!!errors.clientAge}
                 />
                 <TextInput
                   label="Peso (kg)"
@@ -288,6 +405,7 @@ export default function TrainerForm() {
                   required
                   error={errors.clientWeight}
                   className="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                  data-error={!!errors.clientWeight}
                 />
                 <TextInput
                   label="Altezza (cm)"
@@ -298,23 +416,68 @@ export default function TrainerForm() {
                   required
                   error={errors.clientHeight}
                   className="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                  data-error={!!errors.clientHeight}
                 />
                 <div className="md:col-span-2">
-                  <TextArea
-                    label="Obiettivi"
-                    name="clientGoals"
-                    value={formData.clientGoals}
-                    onChange={handleInputChange}
-                  />
+                  <div className="flex items-center gap-6">
+                    <div className="flex items-center">
+                      <input
+                        type="checkbox"
+                        id="showGoals"
+                        checked={showGoals}
+                        onChange={(e) => handleGoalsToggle(e.target.checked)}
+                        className="h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded"
+                      />
+                      <label
+                        htmlFor="showGoals"
+                        className="ml-2 text-sm text-gray-700"
+                      >
+                        Aggiungi obiettivi
+                      </label>
+                    </div>
+                    <div className="flex items-center">
+                      <input
+                        type="checkbox"
+                        id="showMedicalConditions"
+                        checked={showMedicalConditions}
+                        onChange={(e) =>
+                          handleMedicalConditionsToggle(e.target.checked)
+                        }
+                        className="h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded"
+                      />
+                      <label
+                        htmlFor="showMedicalConditions"
+                        className="ml-2 text-sm text-gray-700"
+                      >
+                        Aggiungi condizioni mediche
+                      </label>
+                    </div>
+                  </div>
                 </div>
-                <div className="md:col-span-2">
-                  <TextArea
-                    label="Condizioni Mediche"
-                    name="medicalConditions"
-                    value={formData.medicalConditions}
-                    onChange={handleInputChange}
-                  />
-                </div>
+                {(showGoals || showMedicalConditions) && (
+                  <div className="md:col-span-2 bg-gray-50 dark:bg-gray-800 p-4 rounded-lg border border-gray-200 dark:border-gray-700">
+                    {showGoals && (
+                      <div className="mb-4">
+                        <TextArea
+                          label="Obiettivi"
+                          name="clientGoals"
+                          value={formData.clientGoals}
+                          onChange={handleInputChange}
+                        />
+                      </div>
+                    )}
+                    {showMedicalConditions && (
+                      <div>
+                        <TextArea
+                          label="Condizioni Mediche"
+                          name="medicalConditions"
+                          value={formData.medicalConditions}
+                          onChange={handleInputChange}
+                        />
+                      </div>
+                    )}
+                  </div>
+                )}
               </div>
             </div>
 
@@ -368,7 +531,7 @@ export default function TrainerForm() {
                         label="Serie"
                         name={`exercise-${index}-sets`}
                         type="number"
-                        value={exercise.sets.toString()}
+                        value={exercise.sets?.toString() || ""}
                         onChange={(e) =>
                           handleExerciseChange(
                             index,
@@ -376,28 +539,25 @@ export default function TrainerForm() {
                             parseInt(e.target.value)
                           )
                         }
-                        required
                         className="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                         placeholder={index === 0 ? undefined : "3"}
                       />
                       <TextInput
                         label="Ripetizioni"
                         name={`exercise-${index}-reps`}
-                        value={exercise.reps}
+                        value={exercise.reps || ""}
                         onChange={(e) =>
                           handleExerciseChange(index, "reps", e.target.value)
                         }
-                        required
                         placeholder={index === 0 ? undefined : "10"}
                       />
                       <TextInput
                         label="Recupero"
                         name={`exercise-${index}-rest`}
-                        value={exercise.rest}
+                        value={exercise.rest || ""}
                         onChange={(e) =>
                           handleExerciseChange(index, "rest", e.target.value)
                         }
-                        required
                         placeholder={index === 0 ? undefined : "1'30"}
                       />
                       <div className="md:col-span-2">
@@ -419,7 +579,7 @@ export default function TrainerForm() {
                         <TextArea
                           label="Note"
                           name={`exercise-${index}-notes`}
-                          value={exercise.notes}
+                          value={exercise.notes || ""}
                           onChange={(e) =>
                             handleExerciseChange(index, "notes", e.target.value)
                           }
