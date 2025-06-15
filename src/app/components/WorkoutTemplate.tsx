@@ -43,7 +43,7 @@ const WorkoutTemplate: React.FC<WorkoutTemplateProps> = ({
   return (
     <div>
       <div className="header">
-        <h1>🏋️‍♀️ Guida Completa Workout Casa</h1>
+        <h1>🏋️‍♀️ Guida Completa Workout Casalingo</h1>
         <p>Circuito personalizzato per {clientInfo?.name}</p>
       </div>
 
