@@ -2,18 +2,16 @@ import chromium from "@sparticuz/chromium-min";
 import puppeteerCore from "puppeteer-core";
 
 async function getBrowser() {
-  const REMOTE_PATH = process.env.CHROMIUM_REMOTE_EXEC_PATH;
+  const REMOTE_PATH =
+    process.env.CHROMIUM_REMOTE_EXEC_PATH || "/usr/bin/chromium-browser";
   const LOCAL_PATH =
     process.env.CHROMIUM_LOCAL_EXEC_PATH ||
     "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome";
 
   if (process.env.NODE_ENV === "production") {
-    if (!REMOTE_PATH) {
-      throw new Error("Missing CHROMIUM_REMOTE_EXEC_PATH for production");
-    }
     return await puppeteerCore.launch({
       args: chromium.args,
-      executablePath: await chromium.executablePath(REMOTE_PATH),
+      executablePath: REMOTE_PATH,
       defaultViewport: null,
       headless: true,
     });
