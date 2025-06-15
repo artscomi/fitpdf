@@ -8,9 +8,14 @@ export async function generatePDF(html: string): Promise<Buffer> {
   let browser;
   try {
     if (process.env.NODE_ENV === "production") {
+      const executablePath = await chromium.executablePath();
+      if (!executablePath) {
+        throw new Error("Could not find Chromium executable path");
+      }
+
       browser = await puppeteerCore.launch({
         args: chromium.args,
-        executablePath: process.env.CHROME_AWS_LAMBDA_CHROME_EXECUTABLE_PATH,
+        executablePath,
         headless: chromium.headless,
         ignoreHTTPSErrors: true,
       });
