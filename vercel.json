@@ -4,5 +4,11 @@
       "memory": 1024,
       "maxDuration": 10
     }
-  }
+  },
+  "build": {
+    "env": {
+      "CHROME_AWS_LAMBDA_CHROME_EXECUTABLE_PATH": "/var/task/node_modules/@sparticuz/chromium/bin/chromium"
+    }
+  },
+  "installCommand": "apt-get update && apt-get install -y libnss3 libatk1.0-0 libatk-bridge2.0-0 libcups2 libdrm2 libxkbcommon0 libxcomposite1 libxdamage1 libxfixes3 libxrandr2 libgbm1 libasound2"
 }
