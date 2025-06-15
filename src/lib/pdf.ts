@@ -3,13 +3,18 @@ import chromium from "@sparticuz/chromium";
 
 const isProd = process.env.NODE_ENV === "production";
 
-console.log("Chromium path", await chromium.executablePath());
-console.log("Chromium args", chromium.args);
+// Enhanced logging for debugging
+console.log("Environment:", isProd ? "Production" : "Development");
+console.log("Chromium path:", await chromium.executablePath());
+console.log("Chromium args:", JSON.stringify(chromium.args, null, 2));
 
 export async function generatePDF(html: string): Promise<Buffer> {
   const executablePath = isProd
     ? await chromium.executablePath()
     : "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome";
+
+  console.log("Using executable path:", executablePath);
+  console.log("Using args:", isProd ? chromium.args : []);
 
   const browser = await puppeteer.launch({
     args: isProd ? chromium.args : [],
