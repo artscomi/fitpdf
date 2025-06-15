@@ -1,57 +1,39 @@
-import puppeteerCore from "puppeteer-core";
+import puppeteer from "puppeteer-core";
 import chromium from "@sparticuz/chromium";
 
-const LOCAL_CHROME_PATH =
-  "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome";
+const isProd = process.env.NODE_ENV === "production";
 
 export async function generatePDF(html: string): Promise<Buffer> {
-  let browser;
-  try {
-    if (process.env.NODE_ENV === "production") {
-      const executablePath = await chromium.executablePath();
-      if (!executablePath) {
-        throw new Error("Could not find Chromium executable path");
-      }
+  const executablePath = isProd
+    ? await chromium.executablePath()
+    : "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome";
 
-      browser = await puppeteerCore.launch({
-        args: chromium.args,
-        executablePath,
-        headless: chromium.headless,
-        ignoreHTTPSErrors: true,
-      });
-    } else {
-      browser = await puppeteerCore.launch({
-        executablePath: LOCAL_CHROME_PATH,
-        headless: true,
-      });
-    }
+  const browser = await puppeteer.launch({
+    args: isProd ? chromium.args : [],
+    executablePath,
+    headless: true,
+    ignoreHTTPSErrors: true,
+  });
 
-    const page = await browser.newPage();
-    await page.setContent(html, { waitUntil: "networkidle0" });
+  const page = await browser.newPage();
+  await page.setContent(html, { waitUntil: "networkidle0" });
 
-    // Aspetta che tutte le immagini siano caricate
-    await page.waitForFunction(() => {
-      const images = Array.from(document.images);
-      return images.every((img) => img.complete);
-    });
+  await page.waitForFunction(() => {
+    const images = Array.from(document.images);
+    return images.every((img) => img.complete);
+  });
 
-    const pdf = await page.pdf({
-      format: "a4",
-      printBackground: true,
-      margin: {
-        top: "20px",
-        right: "20px",
-        bottom: "20px",
-        left: "20px",
-      },
-    });
+  const pdf = await page.pdf({
+    format: "a4",
+    printBackground: true,
+    margin: {
+      top: "20px",
+      right: "20px",
+      bottom: "20px",
+      left: "20px",
+    },
+  });
 
-    await browser.close();
-    return pdf;
-  } catch (error) {
-    if (browser) {
-      await browser.close();
-    }
-    throw error;
-  }
+  await browser.close();
+  return pdf;
 }
