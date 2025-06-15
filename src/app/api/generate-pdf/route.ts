@@ -1,5 +1,8 @@
+// app/api/pdf/route.ts
 import { NextResponse } from "next/server";
 import { generatePDF } from "@/lib/pdf";
+
+export const runtime = "nodejs"; // 🔥 ESSENZIALE
 
 export async function POST(request: Request) {
   try {
