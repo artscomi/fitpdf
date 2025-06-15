@@ -9,7 +9,7 @@ async function getBrowser() {
   if (process.env.NODE_ENV === "production") {
     return await puppeteerCore.launch({
       args: chromium.args,
-      executablePath: "/usr/bin/chromium",
+      executablePath: await chromium.executablePath(),
       defaultViewport: null,
       headless: true,
     });
