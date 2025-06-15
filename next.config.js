@@ -5,11 +5,11 @@ const nextConfig = {
   },
   webpack: (config, { isServer }) => {
     if (isServer) {
-      config.externals.push("chrome-aws-lambda");
+      config.externals.push("@sparticuz/chromium");
     }
     return config;
   },
-  serverExternalPackages: ["puppeteer-core", "chrome-aws-lambda"],
+  serverExternalPackages: ["puppeteer-core", "@sparticuz/chromium"],
 };
 
 module.exports = nextConfig;

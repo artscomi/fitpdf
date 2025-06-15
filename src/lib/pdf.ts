@@ -1,5 +1,5 @@
 import puppeteerCore from "puppeteer-core";
-import chromium from "chrome-aws-lambda";
+import chromium from "@sparticuz/chromium";
 
 const LOCAL_CHROME_PATH =
   "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome";
@@ -8,10 +8,10 @@ export async function generatePDF(html: string): Promise<Buffer> {
   let browser;
   try {
     if (process.env.NODE_ENV === "production") {
-      browser = await chromium.puppeteer.launch({
+      browser = await puppeteerCore.launch({
         args: chromium.args,
         defaultViewport: chromium.defaultViewport,
-        executablePath: await chromium.executablePath,
+        executablePath: await chromium.executablePath(),
         headless: true,
         ignoreHTTPSErrors: true,
       });
