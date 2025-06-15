@@ -3,6 +3,9 @@ import chromium from "@sparticuz/chromium";
 
 const isProd = process.env.NODE_ENV === "production";
 
+console.log("Chromium path", await chromium.executablePath());
+console.log("Chromium args", chromium.args);
+
 export async function generatePDF(html: string): Promise<Buffer> {
   const executablePath = isProd
     ? await chromium.executablePath()
