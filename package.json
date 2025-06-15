@@ -9,7 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@sparticuz/chromium-min": "^133.0.0",
+    "@sparticuz/chromium": "^137.0.1",
     "next": "15.2.4",
     "puppeteer-core": "^24.5.0",
     "react": "^19.0.0",
