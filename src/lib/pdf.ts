@@ -15,6 +15,7 @@ export async function generatePDF(html: string): Promise<Buffer> {
 
   console.log("Using executable path:", executablePath);
   console.log("Using args:", isProd ? chromium.args : []);
+  console.log("Chromium headless:", chromium.headless);
 
   const browser = await puppeteer.launch({
     args: isProd ? chromium.args : [],
