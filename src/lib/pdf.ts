@@ -1,39 +1,28 @@
-import chromium from "@sparticuz/chromium";
 import puppeteerCore from "puppeteer-core";
+import chromium from "chrome-aws-lambda";
 
-async function getBrowser() {
-  const LOCAL_PATH =
-    process.env.CHROMIUM_LOCAL_EXEC_PATH ||
-    "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome";
+const LOCAL_CHROME_PATH =
+  "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome";
 
-  if (process.env.NODE_ENV === "production") {
-    return await puppeteerCore.launch({
-      args: chromium.args,
-      executablePath: await chromium.executablePath(),
-      defaultViewport: null,
-      headless: true,
-    });
-  }
-
-  return await puppeteerCore.launch({
-    executablePath: LOCAL_PATH,
-    defaultViewport: null,
-    headless: true,
-  });
-}
-
-export const makePDFFromHTML = async (html: string): Promise<Buffer> => {
+export async function generatePDF(html: string): Promise<Buffer> {
+  let browser;
   try {
-    const browser = await getBrowser();
+    if (process.env.NODE_ENV === "production") {
+      browser = await chromium.puppeteer.launch({
+        args: chromium.args,
+        defaultViewport: chromium.defaultViewport,
+        executablePath: await chromium.executablePath,
+        headless: true,
+        ignoreHTTPSErrors: true,
+      });
+    } else {
+      browser = await puppeteerCore.launch({
+        executablePath: LOCAL_CHROME_PATH,
+        headless: true,
+      });
+    }
+
     const page = await browser.newPage();
-
-    page.on("pageerror", (err: Error) => {
-      throw err;
-    });
-    page.on("error", (err: Error) => {
-      throw err;
-    });
-
     await page.setContent(html, { waitUntil: "networkidle0" });
 
     // Aspetta che tutte le immagini siano caricate
@@ -45,15 +34,20 @@ export const makePDFFromHTML = async (html: string): Promise<Buffer> => {
     const pdf = await page.pdf({
       format: "a4",
       printBackground: true,
-      margin: { top: "20px", right: "20px", bottom: "20px", left: "20px" },
-      preferCSSPageSize: true,
-      displayHeaderFooter: false,
-      scale: 1.0,
+      margin: {
+        top: "20px",
+        right: "20px",
+        bottom: "20px",
+        left: "20px",
+      },
     });
 
     await browser.close();
-    return Buffer.from(pdf);
+    return pdf;
   } catch (error) {
+    if (browser) {
+      await browser.close();
+    }
     throw error;
   }
-};
+}

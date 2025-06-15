@@ -3,7 +3,13 @@ const nextConfig = {
   images: {
     domains: ["img.youtube.com"],
   },
-  serverExternalPackages: ["puppeteer-core", "@sparticuz/chromium"],
+  webpack: (config, { isServer }) => {
+    if (isServer) {
+      config.externals.push("chrome-aws-lambda");
+    }
+    return config;
+  },
+  serverExternalPackages: ["puppeteer-core", "chrome-aws-lambda"],
 };
 
 module.exports = nextConfig;
