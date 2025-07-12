@@ -156,33 +156,68 @@ export async function generatePDF(
       console.log("✅ Titolo trovato nell'HTML");
     }
 
-    // Invia la richiesta all'API
-    const response = await fetch("/api/generate-pdf", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ html, filename }),
-    });
+    // Prima prova l'endpoint principale
+    try {
+      const response = await fetch("/api/generate-pdf", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ html, filename }),
+      });
 
-    if (!response.ok) {
-      throw new Error("Failed to generate PDF");
+      if (response.ok) {
+        // Scarica il PDF
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = `${filename}.pdf`;
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+        document.body.removeChild(a);
+        return true;
+      } else {
+        console.warn("⚠️ Endpoint principale fallito, provo il fallback...");
+        throw new Error("Main endpoint failed");
+      }
+    } catch (error) {
+      console.log("🔄 Usando endpoint di fallback...");
+      
+      // Se il principale fallisce, usa il fallback
+      const fallbackResponse = await fetch("/api/generate-pdf-fallback", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ html, filename }),
+      });
+
+      if (!fallbackResponse.ok) {
+        throw new Error("Both endpoints failed");
+      }
+
+      // Il fallback restituisce HTML, quindi lo scarichiamo come file HTML
+      const htmlContent = await fallbackResponse.text();
+      const blob = new Blob([htmlContent], { type: "text/html" });
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `${filename}.html`;
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+      document.body.removeChild(a);
+
+      // Mostra un messaggio all'utente
+      alert("PDF generato come file HTML (compatibile con stampa). Apri il file e usa 'Stampa' per salvarlo come PDF.");
+      
+      return true;
     }
-
-    // Scarica il PDF
-    const blob = await response.blob();
-    const url = window.URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `${filename}.pdf`;
-    document.body.appendChild(a);
-    a.click();
-    window.URL.revokeObjectURL(url);
-    document.body.removeChild(a);
-
-    return true;
   } catch (error) {
     console.error("Errore durante la generazione del PDF:", error);
+    alert("Errore nella generazione del PDF. Riprova più tardi.");
     return false;
   }
 }
