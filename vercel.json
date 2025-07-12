@@ -11,6 +11,15 @@
     "app/api/test-pdf/route": {
       "memory": 1024,
       "maxDuration": 30
+    },
+    "app/api/generate-pdf-fallback/route": {
+      "memory": 512,
+      "maxDuration": 10
+    }
+  },
+  "build": {
+    "env": {
+      "PUPPETEER_SKIP_CHROMIUM_DOWNLOAD": "true"
     }
   }
 }

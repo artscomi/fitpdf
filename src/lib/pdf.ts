@@ -31,15 +31,39 @@ export async function generatePDF(html: string): Promise<Buffer> {
         "--disable-renderer-backgrounding",
         "--disable-features=TranslateUI",
         "--disable-ipc-flooding-protection",
+        "--disable-extensions",
+        "--disable-plugins",
+        "--disable-web-security",
+        "--disable-features=VizDisplayCompositor",
+        "--font-render-hinting=none",
+        "--disable-font-subpixel-positioning",
+        "--disable-lcd-text",
+        "--disable-subpixel-font-positioning",
+        "--disable-font-smoothing",
         // Argomenti specifici per Vercel
-        ...(isVercel ? [
-          "--disable-extensions",
-          "--disable-plugins",
-          "--disable-images",
-          "--disable-javascript",
-          "--disable-web-security",
-          "--disable-features=VizDisplayCompositor",
-        ] : []),
+        "--disable-background-networking",
+        "--disable-default-apps",
+        "--disable-sync",
+        "--metrics-recording-only",
+        "--no-default-browser-check",
+        "--no-pings",
+        "--password-store=basic",
+        "--use-mock-keychain",
+        "--disable-domain-reliability",
+        "--disable-print-preview",
+        "--disable-speech-api",
+        "--disk-cache-size=33554432",
+        "--mute-audio",
+        "--hide-scrollbars",
+        "--ignore-gpu-blocklist",
+        "--in-process-gpu",
+        "--window-size=1920,1080",
+        "--use-gl=angle",
+        "--use-angle=swiftshader",
+        "--allow-running-insecure-content",
+        "--disable-site-isolation-trials",
+        "--disable-features=Translate,BackForwardCache,AcceptCHFrame,MediaRouter,OptimizationHints,AudioServiceOutOfProcess,IsolateOrigins,site-per-process",
+        "--enable-features=NetworkServiceInProcess2,SharedArrayBuffer",
       ]
     : [];
 
@@ -65,17 +89,52 @@ export async function generatePDF(html: string): Promise<Buffer> {
     // Imposta le dimensioni della viewport
     await page.setViewport({ width: 1200, height: 800 });
     
+    // Intercetta le richieste di font per evitarle
+    await page.setRequestInterception(true);
+    page.on('request', (request) => {
+      if (request.resourceType() === 'font' || request.url().includes('font')) {
+        request.abort();
+      } else {
+        request.continue();
+      }
+    });
+    
+    // Semplifica l'HTML rimuovendo solo i riferimenti a font esterni problematici
+    const simplifiedHtml = html
+      .replace(/@font-face[^}]+}/g, '')
+      .replace(/src:\s*url\([^)]+\)/g, '')
+      .replace(/\/_next\/static\/media\/[^)]+\)/g, '')
+      .replace(/\/__nextjs_font\/[^)]+\)/g, '')
+      // Preserva il font-family ma sostituisci solo quelli problematici
+      .replace(/font-family:\s*['"]?Poppins['"]?[^;]*;/g, 'font-family: Arial, sans-serif;')
+      .replace(/font-family:\s*['"]?Inter['"]?[^;]*;/g, 'font-family: Arial, sans-serif;');
+    
+    // Debug: verifica che il titolo sia presente
+    if (!simplifiedHtml.includes("Guida Completa Workout Casalingo")) {
+      console.warn("⚠️ Titolo non trovato nell'HTML semplificato!");
+      console.log("HTML preview:", simplifiedHtml.substring(0, 1000));
+    } else {
+      console.log("✅ Titolo trovato nell'HTML semplificato");
+    }
+    
     // Imposta il contenuto HTML
-    await page.setContent(html, { 
-      waitUntil: "networkidle0",
+    await page.setContent(simplifiedHtml, { 
+      waitUntil: "domcontentloaded",
       timeout: 30000 
     });
 
-    // Aspetta che tutte le immagini siano caricate
-    await page.waitForFunction(() => {
-      const images = Array.from(document.images);
-      return images.every((img) => img.complete);
-    }, { timeout: 10000 });
+    // Aspetta un po' per il rendering
+    await new Promise(resolve => setTimeout(resolve, 2000));
+
+    // Aspetta che tutte le immagini siano caricate (se presenti)
+    try {
+      await page.waitForFunction(() => {
+        const images = Array.from(document.images);
+        return images.every((img) => img.complete);
+      }, { timeout: 5000 });
+    } catch (error) {
+      console.log("Timeout waiting for images, continuing anyway");
+    }
 
     // Genera il PDF
     const pdf = await page.pdf({
@@ -88,6 +147,7 @@ export async function generatePDF(html: string): Promise<Buffer> {
         left: "20px",
       },
       timeout: 30000,
+      preferCSSPageSize: false,
     });
 
     return pdf;
