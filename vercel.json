@@ -1,11 +1,15 @@
 {
   "functions": {
     "app/api/generate-pdf/route": {
-      "memory": 3008,
+      "memory": 1024,
+      "maxDuration": 30
+    },
+    "app/api/generate-pdf-simple/route": {
+      "memory": 1024,
       "maxDuration": 30
     },
     "app/api/test-pdf/route": {
-      "memory": 3008,
+      "memory": 1024,
       "maxDuration": 30
     }
   }
