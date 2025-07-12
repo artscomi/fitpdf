@@ -7,9 +7,21 @@ const nextConfig = {
     if (isServer) {
       config.externals.push("@sparticuz/chromium");
     }
+    
+    // Gestione migliore per Puppeteer
+    config.resolve.fallback = {
+      ...config.resolve.fallback,
+      fs: false,
+      net: false,
+      tls: false,
+    };
+    
     return config;
   },
   serverExternalPackages: ["puppeteer-core", "@sparticuz/chromium"],
+  experimental: {
+    serverComponentsExternalPackages: ["puppeteer-core", "@sparticuz/chromium"],
+  },
 };
 
 module.exports = nextConfig;
