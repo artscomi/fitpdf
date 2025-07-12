@@ -15,6 +15,30 @@ async function getBase64FromUrl(url: string): Promise<string> {
   }
 }
 
+// Funzione di pulizia soft: rimuove solo font custom e font-face
+function cleanHtmlForPdf(html: string): string {
+  // Rimuovi solo i font custom e font-face
+  let cleaned = html
+    .replace(/@font-face\s*\{[^}]*\}/g, '') // solo blocchi font-face
+    .replace(/src:\s*url\([^)]+\)/g, '')    // solo src font
+    .replace(/\/_next\/static\/media\/[^)]+\)/g, '')
+    .replace(/\/__nextjs_font\/[^)]+\)/g, '');
+
+  // Sostituisci solo i font-family problematici
+  cleaned = cleaned.replace(/font-family:\s*(['"]?Geist[^;]*;?)/g, 'font-family: Arial, sans-serif;');
+
+  // Aggiungi uno stile di fallback solo se non c'è già
+  if (!cleaned.includes('font-family:')) {
+    cleaned = cleaned.replace('</head>', `
+      <style>
+        body { font-family: Arial, sans-serif; }
+      </style>
+    </head>`);
+  }
+
+  return cleaned;
+}
+
 export async function generatePDF(
   element: HTMLElement,
   filename: string
@@ -46,7 +70,7 @@ export async function generatePDF(
       .join("\n");
 
     // Prepara l'HTML con tutti gli stili necessari
-    const html = `
+    let html = `
       <!DOCTYPE html>
       <html>
         <head>
@@ -67,6 +91,9 @@ export async function generatePDF(
         </body>
       </html>
     `;
+
+    // Applica la pulizia soft
+    html = cleanHtmlForPdf(html);
 
     // Invia la richiesta all'API
     const response = await fetch("/api/generate-pdf", {
