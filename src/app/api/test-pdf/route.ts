@@ -11,42 +11,40 @@ export async function GET() {
       <html>
         <head>
           <title>Test PDF</title>
+          <meta charset="utf-8">
           <style>
-            body { font-family: Arial, sans-serif; padding: 20px; }
-            h1 { color: #333; }
-            p { color: #666; }
+            body { font-family: Arial, sans-serif; margin: 20px; }
+            .header { background: #7159b5; color: white; padding: 20px; text-align: center; border-radius: 15px; }
+            .header h1 { font-size: 2.5rem; font-weight: 700; margin-bottom: 8px; color: white !important; }
+            .header p { font-size: 1.1rem; opacity: 0.9; font-weight: 300; color: white !important; }
           </style>
         </head>
         <body>
-          <h1>Test PDF Generation</h1>
-          <p>This is a test PDF generated on ${new Date().toLocaleString()}</p>
-          <p>If you can see this, PDF generation is working correctly!</p>
+          <div class="header">
+            <h1>🏋️‍♀️ Guida Completa Workout Casalingo</h1>
+            <p>Il tuo circuito personalizzato con video tutorial</p>
+          </div>
+          <div>
+            <h2>Test Content</h2>
+            <p>Questo è un test per verificare che il titolo sia visibile nel PDF.</p>
+          </div>
         </body>
       </html>
     `;
 
-    console.log("Testing PDF generation...");
+    console.log("Generating test PDF...");
     const pdf = await generatePDF(testHtml);
     console.log("Test PDF generated successfully, size:", pdf.length, "bytes");
 
     return new NextResponse(pdf, {
       headers: {
         "Content-Type": "application/pdf",
-        "Content-Disposition": "attachment; filename=test.pdf",
+        "Content-Disposition": "attachment; filename=test-pdf.pdf",
         "Content-Length": pdf.length.toString(),
       },
     });
   } catch (error) {
-    console.error("Test PDF generation failed:", error);
-    return new NextResponse(
-      JSON.stringify({ 
-        error: "Test failed", 
-        message: error instanceof Error ? error.message : "Unknown error" 
-      }), 
-      { 
-        status: 500,
-        headers: { "Content-Type": "application/json" }
-      }
-    );
+    console.error("Error generating test PDF:", error);
+    return new NextResponse(`Error generating test PDF: ${error}`, { status: 500 });
   }
 } 
